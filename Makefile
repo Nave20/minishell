@@ -4,7 +4,8 @@ INC_DIR		= header/
 
 LIB = libft/libft.a
 
-SRC_FILES	= minishell.c	\
+SRC_FILES	=	minishell.c	\
+				main.c
 
 SOURCES		= $(addprefix $(SRC_DIR), $(SRC_FILES))
 

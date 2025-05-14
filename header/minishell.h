@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vpirotti <vpirotti@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/05/13 08:32:49 by vpirotti         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:26:45 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,42 @@
 # define RED "\033[31m"
 
 //-------------------------------INCLUDE-------------------------------
-# include <stdio.h>
-# include <stdint.h>
+# include <errno.h>
 # include <fcntl.h>
+# include <stdbool.h>
+# include <stdint.h>
+# include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include <errno.h>
 
 //-------------------------------STRUCTS-------------------------------
+typedef enum e_quote
+{
+	S_QUOTE,
+	D_QUOTE,
+	NORMAL
+}			t_quote;
+typedef enum e_type
+{
+	STRING,
+	CMD,
+	FLAG,
+	PIPE,
+	ENVV,
+	INFILE,
+	OUTFILE
+}			t_type;
+typedef struct s_data
+{
+	char	*input;
+	t_token	*token;
+}			t_data;
+typedef struct s_token
+{
+	int		quote;
+	int		type;
+	char	*tab;
+}			t_token;
 
 //--------------------------------MAIN---------------------------------
 
