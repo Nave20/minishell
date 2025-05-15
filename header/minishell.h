@@ -27,11 +27,47 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <errno.h>
+# include <stdbool.h>
+# include "../libft/libft.h"
 
 //-------------------------------STRUCTS-------------------------------
+typedef enum e_quote
+{
+	S_QUOTE,
+	D_QUOTE,
+	N_QUOTE
+}			t_quote;
+
+typedef enum e_type
+{
+	STRING,
+	CMD,
+	CMD_BI,
+	FLAG,
+	PIPE,
+	ENV_V,
+	INFILE,
+	OUTFILE
+}			t_type;
+
+typedef struct s_token
+{
+	int		quote;
+	int		type;
+	char	*tab;
+}			t_token;
+
+typedef struct s_data
+{
+	char	*input;
+	t_token	*token;
+}			t_data;
 
 //--------------------------------MAIN---------------------------------
 
-//-------------------------------PRINTF--------------------------------
+//------------------------------BUILTINS-------------------------------
+bool	ft_echo(char **content);
+bool	ft_pwd(void);
+void	ft_env(char **env);
 
 #endif

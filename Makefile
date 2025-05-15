@@ -8,7 +8,9 @@ BUILTINS_DIR    = $(SRC_DIR)builtins/
 BUILTINS_OBJDIR = $(OBJ_DIR)builtins/
 
 SRC_FILES       = minishell.c
-BUILTINS_FILES  =
+BUILTINS_FILES  = 	echo.c	\
+					pwd.c	\
+					env.c	\
 
 SOURCES         = $(addprefix $(SRC_DIR), $(SRC_FILES)) \
                   $(addprefix $(BUILTINS_DIR), $(BUILTINS_FILES))
@@ -33,7 +35,10 @@ $(BUILTINS_OBJDIR)%.o: $(BUILTINS_DIR)%.c $(HEADER)
 	$(CC) $(FLAGS) -c $< -o $@
 
 $(NAME): $(OBJS) $(LIB) $(HEADER) Makefile
-	$(CC) $(FLAGS) -o $@ $(OBJS)
+	$(CC) $(FLAGS) -o $@ $(OBJS) $(LIB)
+
+$(LIB):
+	make -C libft
 
 clean:
 	make clean -C libft/
