@@ -6,7 +6,7 @@
 /*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/05/13 16:26:45 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/05/14 15:57:50 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,16 @@ typedef enum e_quote
 {
 	S_QUOTE,
 	D_QUOTE,
-	NORMAL
+	N_QUOTE
 }			t_quote;
 typedef enum e_type
 {
 	STRING,
 	CMD,
+	CMD_BI,
 	FLAG,
 	PIPE,
-	ENVV,
+	ENV_V,
 	INFILE,
 	OUTFILE
 }			t_type;
