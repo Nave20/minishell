@@ -6,7 +6,7 @@
 /*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/05/14 15:57:50 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/05/15 13:02:04 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,17 +47,17 @@ typedef enum e_type
 	INFILE,
 	OUTFILE
 }			t_type;
-typedef struct s_data
-{
-	char	*input;
-	t_token	*token;
-}			t_data;
 typedef struct s_token
 {
 	int		quote;
 	int		type;
 	char	*tab;
 }			t_token;
+typedef struct s_data
+{
+	char	*input;
+	t_token	*token;
+}			t_data;
 
 //--------------------------------MAIN---------------------------------
 
