@@ -33,7 +33,10 @@ $(BUILTINS_OBJDIR)%.o: $(BUILTINS_DIR)%.c $(HEADER)
 	$(CC) $(FLAGS) -c $< -o $@
 
 $(NAME): $(OBJS) $(LIB) $(HEADER) Makefile
-	$(CC) $(FLAGS) -o $@ $(OBJS)
+	$(CC) $(FLAGS) -o $@ $(OBJS) $(LIB) -lreadline
+
+$(LIB) :
+	make -C libft/
 
 clean:
 	make clean -C libft/

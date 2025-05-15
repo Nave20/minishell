@@ -6,7 +6,7 @@
 /*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:24:01 by lpaysant          #+#    #+#             */
-/*   Updated: 2025/05/15 14:29:59 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/05/15 15:44:41 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,25 +54,21 @@ int	handle_quote(t_data *data, int *nbword, int quote, int *i)
 		return (-1); // a completer avec erreur correspondante
 	(*i)++;
 	start = *i;
-	while (data->input[*i])
-	{
-		if (data->input[*i] == quote)
-		{
-			end = (*i) - 1;
-			data->token[*nbword].tab = put_token(data, start, end);
-			// copie le token entre quotes dans tab
-			if (quote == '\'')
-				data->token[*nbword].quote = S_QUOTE;
-			if (quote == '"')
-				data->token[*nbword].quote = D_QUOTE;
-			(*nbword)++;
-		}
+	while (data->input[*i] != quote)
 		(*i)++;
-	}
+	end = (*i) - 1;
+	data->token[*nbword].tab = put_token(data, start, end);
+	// copie le token entre quotes dans tab
+	if (quote == '\'')
+		data->token[*nbword].quote = S_QUOTE;
+	if (quote == '"')
+		data->token[*nbword].quote = D_QUOTE;
+	(*nbword)++;
+	(*i)++;
 	return (0);
 }
 
-void	handle_normal(t_data *data, int *nbword, int *i, int count)
+void	handle_normal(t_data *data, int *nbword, int *i)
 {
 	int	start;
 	int	end;
@@ -80,18 +76,16 @@ void	handle_normal(t_data *data, int *nbword, int *i, int count)
 	start = *i;
 	while (data->input[*i])
 	{
+		(*i)++;
 		if (data->input[*i] == ' ' || data->input[*i] == '\0'
 			|| data->input[*i] == '\'' || data->input[*i] == '"')
 		{
-			if (count == 0)
-			{
-				end = (*i) - 1;
-				data->token[*nbword].tab = put_token(data, start, end);
-				data->token[*nbword].quote = N_QUOTE;
-			}
+			end = (*i) - 1;
+			data->token[*nbword].tab = put_token(data, start, end);
+			data->token[*nbword].quote = N_QUOTE;
 			(*nbword)++;
+			return ;
 		}
-		(*i)++;
 	}
 }
 
@@ -117,18 +111,22 @@ int	input_pars(t_data *data, char *input)
 				return (-1); // VDD
 		}
 		if (input[i] != ' ' && input[i] != '\'' && input[i] != '"')
-			handle_normal(data, &nbword, &i, 0);
+			handle_normal(data, &nbword, &i);
 	}
 	return (0);
 }
 
-// void	print_token(t_data *data)
-// {
-// 	int	i;
+void	print_token(t_data *data)
+{
+	int	i;
 
-// 	i = 0;
-// 	while (data->token[i])
-// }
+	i = 0;
+	while (data->token[i].tab)
+	{
+		printf("token[%d] = %s\n", i, data->token[i].tab);
+		i++;
+	}
+}
 
 int	word_count(char *input)
 {
@@ -141,36 +139,37 @@ int	word_count(char *input)
 	{
 		if (input[i] != ' ' && input[i] != '"' && input[i] != '\'')
 		{
-			printf("input = %c\n", input[i]);
 			nbword++;
-			while (input[i] != ' ' && input[i] != '"' && input[i] != '\'')
+			while (input[i] != ' ' && input[i] != '"' && input[i] != '\''
+				&& input[i] != '\0')
 				i++;
 		}
 		while (input[i] == ' ')
 			i++;
 		if (input[i] == '"')
 		{
+			i++;
 			while (input[i] && input[i] != '"')
 				i++;
 			if (input[i] == '"')
 			{
-				printf("input = %c\n", input[i]);
 				nbword++;
 				i++;
 			}
 		}
 		if (input[i] == '\'')
 		{
+			i++;
 			while (input[i] && input[i] != '\'')
 				i++;
 			if (input[i] == '\'')
 			{
-				printf("input = %c\n", input[i]);
 				nbword++;
 				i++;
 			}
 		}
 	}
+	printf("nbword = %d\n", nbword);
 	return (nbword);
 }
 
@@ -179,14 +178,15 @@ int	main(void)
 	t_data	data;
 	int		nbword;
 
-	data.input = readline("minishell>");
+	data.input = readline("minishell> ");
+	// gfdgdg'fgdfg gfdgfd   dfgfd'"gssd    "gdssd (essai terminal)
 	if (data.input)
 	{
 		nbword = word_count(data.input);
-		printf("string : %s\n nbword : %d\n", data.input, nbword);
-		// input_pars(&data, data.input);
-		// free(data.input);
-		// print_token(&data);
+		data.token = ft_calloc(nbword + 1, sizeof(t_token));
+		input_pars(&data, data.input);
+		free(data.input);
+		print_token(&data);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/05/15 13:02:04 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/05/15 14:40:49 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # define RED "\033[31m"
 
 //-------------------------------INCLUDE-------------------------------
+# include "../libft/libft.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <stdbool.h>
