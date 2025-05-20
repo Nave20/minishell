@@ -6,7 +6,7 @@
 /*   By: lucasp <lucasp@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:24:01 by lpaysant          #+#    #+#             */
-/*   Updated: 2025/05/20 21:58:57 by lucasp           ###   ########.fr       */
+/*   Updated: 2025/05/20 22:36:17 by lucasp           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,72 +173,6 @@ void	print_token(t_data *data)
 		printf("token[%d] = %s\n", i, data->token[i].tab);
 		i++;
 	}
-}
-
-int	word_count(char *input)
-{
-	int	i;
-	int	nbword;
-
-	i = 0;
-	nbword = 0;
-	while (input[i])
-	{
-		if (input[i] != ' ' && input[i] != '"' && input[i] != '\''
-			&& input[i] != '|' && input[i] != '<' && input[i] != '>')
-		{
-			nbword++;
-			while (input[i] != ' ' && input[i] != '"' && input[i] != '\''
-				&& input[i] != '\0' && input[i] != '|' && input[i] != '<'
-				&& input[i] != '>')
-				i++;
-		}
-		if (input[i] == '|')
-		{
-			nbword++;
-			i++;
-		}
-		if (input[i] == '<')
-		{
-			nbword++;
-			i++;
-			if (input[i] == '<')
-				i++;
-		}
-		if (input[i] == '>')
-		{
-			nbword++;
-			i++;
-			if (input[i] == '>')
-				i++;
-		}
-		while (input[i] == ' ')
-			i++;
-		if (input[i] == '"')
-		{
-			i++;
-			while (input[i] && input[i] != '"')
-				i++;
-			if (input[i] == '"')
-			{
-				nbword++;
-				i++;
-			}
-		}
-		if (input[i] == '\'')
-		{
-			i++;
-			while (input[i] && input[i] != '\'')
-				i++;
-			if (input[i] == '\'')
-			{
-				nbword++;
-				i++;
-			}
-		}
-	}
-	printf("nbword = %d\n", nbword);
-	return (nbword);
 }
 
 int	main(void)
