@@ -44,6 +44,7 @@ bool	env_update(t_env *env, char *name, char *new)
 		}
 		env = env->next;
 	}
+	return (1);
 }
 
 bool	ft_cd(char **args, t_env *env)

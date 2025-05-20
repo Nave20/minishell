@@ -15,12 +15,10 @@
 
 void	ft_env(t_env *env)
 {
-	t_env	*ptr;
-
-	ptr = env;
-	while (ptr->next)
+	while (env->next)
 	{
-		printf("%s=%s\n", ptr->name, ptr->line);
-		ptr = ptr->next;
+		printf(YELLOW"%s="RESET"%s\n", env->name, env->line);
+		env = env->next;
 	}
+	printf(YELLOW"%s="RESET"%s\n", env->name, env->line);
 }
