@@ -6,7 +6,7 @@
 /*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:24:01 by lpaysant          #+#    #+#             */
-/*   Updated: 2025/05/15 15:44:41 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/05/20 17:50:49 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ bool	is_locked(char *tab, int c)
 {
 	int	i;
 
-	i = 0;
+	i = 1;
 	while (tab[i])
 	{
 		if (tab[i] == c)
@@ -68,6 +68,47 @@ int	handle_quote(t_data *data, int *nbword, int quote, int *i)
 	return (0);
 }
 
+void	handle_redirect(t_data *data, int *nbword, int *i, int c)
+{
+	if (data->input[*i + 1] == c)
+	{
+		data->token[*nbword].tab = put_token(data, *i, *i + 1);
+		(*i)++;
+	}
+	else
+		data->token[*nbword].tab = put_token(data, *i, *i);
+	(*nbword)++;
+	(*i)++;
+	return ;
+}
+
+void	handle_special_c(t_data *data, int *nbword, int *i)
+{
+	if (data->input[*i] == '|')
+	{
+		data->token[*nbword].tab = put_token(data, *i, *i);
+		(*nbword)++;
+		(*i)++;
+		return ;
+	}
+	if (data->input[*i] == '<')
+	{
+		if (data->input[*i + 1] == '<')
+			data->token[*nbword].type = HEREDOC;
+		else
+			data->token[*nbword].type = REDIR_IN;
+		handle_redirect(data, nbword, i, '<');
+	}
+	if (data->input[*i] == '>')
+	{
+		if (data->input[*i + 1] == '>')
+			data->token[*nbword].type = APPEND;
+		else
+			data->token[*nbword].type = REDIR_OUT;
+		handle_redirect(data, nbword, i, '>');
+	}
+}
+
 void	handle_normal(t_data *data, int *nbword, int *i)
 {
 	int	start;
@@ -78,7 +119,9 @@ void	handle_normal(t_data *data, int *nbword, int *i)
 	{
 		(*i)++;
 		if (data->input[*i] == ' ' || data->input[*i] == '\0'
-			|| data->input[*i] == '\'' || data->input[*i] == '"')
+			|| data->input[*i] == '\'' || data->input[*i] == '"'
+			|| data->input[*i] == '<' || data->input[*i] == '>'
+			|| data->input[*i] == '|')
 		{
 			end = (*i) - 1;
 			data->token[*nbword].tab = put_token(data, start, end);
@@ -112,6 +155,8 @@ int	input_pars(t_data *data, char *input)
 		}
 		if (input[i] != ' ' && input[i] != '\'' && input[i] != '"')
 			handle_normal(data, &nbword, &i);
+		if (input[i] == '|' || input[i] == '<' || input[i] == '>')
+			handle_special_c(data, &nbword, &i);
 	}
 	return (0);
 }
@@ -137,11 +182,32 @@ int	word_count(char *input)
 	nbword = 0;
 	while (input[i])
 	{
-		if (input[i] != ' ' && input[i] != '"' && input[i] != '\'')
+		if (input[i] != ' ' && input[i] != '"' && input[i] != '\''
+			&& input[i] != '|' && input[i] != '<' && input[i] != '>')
 		{
 			nbword++;
 			while (input[i] != ' ' && input[i] != '"' && input[i] != '\''
-				&& input[i] != '\0')
+				&& input[i] != '\0' && input[i] != '|' && input[i] != '<'
+				&& input[i] != '>')
+				i++;
+		}
+		if (input[i] == '|')
+		{
+			nbword++;
+			i++;
+		}
+		if (input[i] == '<')
+		{
+			nbword++;
+			i++;
+			if (input[i] == '<')
+				i++;
+		}
+		if (input[i] == '>')
+		{
+			nbword++;
+			i++;
+			if (input[i] == '>')
 				i++;
 		}
 		while (input[i] == ' ')
@@ -179,12 +245,12 @@ int	main(void)
 	int		nbword;
 
 	data.input = readline("minishell> ");
-	// gfdgdg'fgdfg gfdgfd   dfgfd'"gssd    "gdssd (essai terminal)
 	if (data.input)
 	{
 		nbword = word_count(data.input);
 		data.token = ft_calloc(nbword + 1, sizeof(t_token));
-		input_pars(&data, data.input);
+		if (input_pars(&data, data.input) == -1)
+			return (-1); // gestion erreur
 		free(data.input);
 		print_token(&data);
 	}

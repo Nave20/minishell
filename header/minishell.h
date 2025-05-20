@@ -6,7 +6,7 @@
 /*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/05/15 14:40:49 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/05/20 17:44:06 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,11 @@ typedef enum e_type
 	PIPE,
 	ENV_V,
 	INFILE,
-	OUTFILE
+	OUTFILE,
+	REDIR_IN,
+	HEREDOC,
+	REDIR_OUT,
+	APPEND
 }			t_type;
 typedef struct s_token
 {
