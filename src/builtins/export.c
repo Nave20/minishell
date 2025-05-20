@@ -45,7 +45,7 @@ void	ft_export(char *str, t_all all)
 	}
 	while (str[i] != '=' && str[i])
 	{
-		if (str[i] <= 'A' || str[i] >= 'Z')
+		if ((str[i] < 'A' || str[i] > 'Z') && str[i] != '_')
 		{
 			printf(RED"export:"RESET" '%s' "YELLOW"is not a valid "
 						   "identifier\n"RESET, str);
