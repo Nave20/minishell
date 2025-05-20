@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucasp <lucasp@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:24:01 by lpaysant          #+#    #+#             */
-/*   Updated: 2025/05/20 17:50:49 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/05/20 21:58:57 by lucasp           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,14 @@ void	handle_redirect(t_data *data, int *nbword, int *i, int c)
 	if (data->input[*i + 1] == c)
 	{
 		data->token[*nbword].tab = put_token(data, *i, *i + 1);
-		(*i)++;
+		(*i) += 2;
 	}
 	else
+	{
 		data->token[*nbword].tab = put_token(data, *i, *i);
+		(*i)++;
+	}
 	(*nbword)++;
-	(*i)++;
 	return ;
 }
 
@@ -153,10 +155,10 @@ int	input_pars(t_data *data, char *input)
 			if (handle_quote(data, &nbword, '\'', &i) == -1)
 				return (-1); // VDD
 		}
-		if (input[i] != ' ' && input[i] != '\'' && input[i] != '"')
-			handle_normal(data, &nbword, &i);
 		if (input[i] == '|' || input[i] == '<' || input[i] == '>')
 			handle_special_c(data, &nbword, &i);
+		if (input[i] != ' ' && input[i] != '\'' && input[i] != '"')
+			handle_normal(data, &nbword, &i);
 	}
 	return (0);
 }
