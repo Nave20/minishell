@@ -6,7 +6,7 @@
 /*   By: lucasp <lucasp@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/05/20 22:28:52 by lucasp           ###   ########.fr       */
+/*   Updated: 2025/05/20 23:26:08 by lucasp           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,9 @@ typedef struct s_data
 
 //--------------------------------MAIN---------------------------------
 int			word_count(char *input);
+int			tokenize_input(t_data *data, char *input);
+char		*put_token(t_data *data, int start, int end);
+bool		is_locked(char *tab, int c);
 //-------------------------------PRINTF--------------------------------
 
 #endif
