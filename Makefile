@@ -7,7 +7,7 @@ LIB             = libft/libft.a
 BUILTINS_DIR    = $(SRC_DIR)builtins/
 BUILTINS_OBJDIR = $(OBJ_DIR)builtins/
 
-SRC_FILES       = main.c word_count.c tokenization.c
+SRC_FILES       = main.c word_count.c tokenization.c token_definition.c
 BUILTINS_FILES  =
 
 SOURCES         = $(addprefix $(SRC_DIR), $(SRC_FILES)) \

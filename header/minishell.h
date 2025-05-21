@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucasp <lucasp@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/05/21 12:59:48 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/05/21 21:53:19 by lucasp           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,12 @@ typedef struct s_data
 }			t_data;
 
 //--------------------------------MAIN---------------------------------
+
+//-------------------------------PARSING-------------------------------
 int			word_count(char *input);
 int			tokenize_input(t_data *data, char *input);
 char		*put_token(t_data *data, int start, int end);
 bool		is_locked(char *tab, int c);
+void		define_token(t_data *data);
 
 #endif
