@@ -24,6 +24,6 @@ bool	ft_pwd(void)
 		perror("pwd");
 		return (1);
 	}
-	ft_printf("%s\n", cwd);
+	ft_printf(BLUE"%s\n"RESET, cwd);
 	return (0);
 }

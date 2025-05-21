@@ -1,30 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
+/*   terminal.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vpirotti <vpirotti@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/20 14:05:04 by vpirotti          #+#    #+#             */
-/*   Updated: 2024/11/20 14:05:04 by vpirotti         ###   ########.fr       */
+/*   Created: 2025/05/21 08:50:27 by vpirotti          #+#    #+#             */
+/*   Updated: 2025/05/21 08:50:27 by vpirotti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../header/minishell.h"
+#include "../libft/libft.h"
+# include <readline/readline.h>
+# include <readline/history.h>
 
-bool	ft_putendl_fd(char *s, int fd)
+void	terminal(t_all all)
 {
-	int	i;
+	char	*input;
 
-	i = 0;
-	while (s[i])
+	while (true)
 	{
-		if (write(fd, &s[i], 1) == -1)
-			return (1);
-		i++;
+		input = readline(CYAN UNDER BOLD"MiniShell:"RESET);
+		if (!input)
+			break ;
+		if (*input)
+			add_history(input);
+		printf("%s\n", input);
+		free(input);
 	}
-	if (write(fd, "\n", 1) == -1)
-		return (1);
-	else
-		return (0);
 }

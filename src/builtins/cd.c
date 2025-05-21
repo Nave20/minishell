@@ -68,7 +68,7 @@ bool	ft_cd(char **args, t_env *env)
 			return (1);
 		}
 	}
-	else if (args[1][0] == '-' && args[0][1] == 0)
+	else if (args[1][0] == '-' && args[1][1] == 0)
 	{
 		target = env_value(env, "OLDPWD");
 		if (!target)

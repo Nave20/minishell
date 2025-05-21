@@ -19,6 +19,7 @@
 # include <stdarg.h>
 # include <stdio.h>
 # include <errno.h>
+# include <stdbool.h>
 
 typedef struct s_list
 {
@@ -50,7 +51,7 @@ char	**ft_split(char const *s, char c);
 char	*ft_strtrim(char const *s1, char const *set);
 int		ft_putstr_fd(char *s, int fd);
 void	ft_lstadd_front(t_list **lst, t_list *new);
-void	ft_putendl_fd(char *s, int fd);
+bool	ft_putendl_fd(char *s, int fd);
 char	*ft_strnstr(const char *src, const char *tofind, size_t size);
 int		ft_putchar_fd(char c, int fd);
 void	*ft_calloc(size_t len, size_t size);

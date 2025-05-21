@@ -52,11 +52,11 @@ t_env	*alloc(char *str)
 	while (str[i] != '=' && str[i])
 		i++;
 	node->name = malloc((i + 1) * sizeof(char));
-	if (!node->name)
+	if (!node->name && node->name[0] != 0)
 		return (free_node(node));
 	ft_strlcpy(node->name, str, i + 1);
 	node->line = malloc(ft_strlen(&str[i + 1]) + 1 * sizeof(char));
-	if (!node->line)
+	if (!node->line && node->line[0] != 0)
 		return (free_node(node));
 	ft_strlcpy(node->line, &str[i + 1], 1 + ft_strlen(&str[i + 1]));
 	node->next = NULL;

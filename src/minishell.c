@@ -11,8 +11,20 @@
 /* ************************************************************************** */
 
 #include "../header/minishell.h"
+#include "../libft/libft.h"
 
-int main(void)
+int main(int argc, char **argv, char **env)
 {
-	printf("test");
+	(void) argc;
+	t_all	all;
+	(void) env;
+	(void) argv;
+
+	terminal(all);
+	// all.env = pars_env(env);
+	// ft_cd(&argv[1], all.env);
+	// ft_pwd();
+	// ft_cd(&argv[3], all.env);
+	// ft_pwd();
+	// free_env(all.env);
 }
