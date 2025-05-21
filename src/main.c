@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucasp <lucasp@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:24:01 by lpaysant          #+#    #+#             */
-/*   Updated: 2025/05/20 23:27:53 by lucasp           ###   ########.fr       */
+/*   Updated: 2025/05/21 12:22:37 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ int	main(void)
 	data.input = readline("minishell> ");
 	if (data.input)
 	{
+		add_history(data.input);
 		nbword = word_count(data.input);
 		data.token = ft_calloc(nbword + 1, sizeof(t_token));
 		if (tokenize_input(&data, data.input) == -1)
