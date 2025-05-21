@@ -6,7 +6,7 @@
 /*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:24:01 by lpaysant          #+#    #+#             */
-/*   Updated: 2025/05/21 12:22:37 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/05/21 13:02:20 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*put_token(t_data *data, int start, int end)
 	int		i;
 
 	i = 0;
-	token = ft_calloc(end - start + 1, sizeof(char));
+	token = ft_calloc(end - start + 2, sizeof(char));
 	while (start <= end)
 	{
 		token[i] = data->input[start];
@@ -57,6 +57,25 @@ void	print_token(t_data *data)
 	}
 }
 
+void	free_data(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	if (data)
+	{
+		if (data->token)
+		{
+			while (data->token[i].tab)
+			{
+				free(data->token[i].tab);
+				i++;
+			}
+			free(data->token);
+		}
+	}
+}
+
 int	main(void)
 {
 	t_data	data;
@@ -71,7 +90,9 @@ int	main(void)
 		if (tokenize_input(&data, data.input) == -1)
 			return (-1); // gestion erreur
 		free(data.input);
-		print_token(&data);
+		define_token(&data);
+		// print_token(&data);
+		free_data(&data);
 	}
 	return (0);
 }

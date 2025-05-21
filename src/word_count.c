@@ -1,4 +1,4 @@
-#include <../header/minishell.h>
+#include "../header/minishell.h"
 
 static void	count_quotes(char *input, int *nbword, int *i)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucasp <lucasp@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/05/20 23:26:08 by lucasp           ###   ########.fr       */
+/*   Updated: 2025/05/21 12:59:48 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,12 @@ typedef enum e_type
 	STRING,
 	CMD,
 	CMD_BI,
+	ARG,
 	FLAG,
-	PIPE,
 	ENV_V,
 	INFILE,
 	OUTFILE,
+	PIPE,
 	REDIR_IN,
 	HEREDOC,
 	REDIR_OUT,
@@ -69,6 +70,5 @@ int			word_count(char *input);
 int			tokenize_input(t_data *data, char *input);
 char		*put_token(t_data *data, int start, int end);
 bool		is_locked(char *tab, int c);
-//-------------------------------PRINTF--------------------------------
 
 #endif
