@@ -72,7 +72,9 @@ int	main(void)
 		if (tokenize_input(&data, data.input) == -1)
 			return (-1); // gestion erreur
 		free(data.input);
+		data.cmd_count = 1;
 		define_token(&data);
+		create_cmd_lst(&data);
 		print_token(&data);
 		free_data(&data);
 	}

@@ -96,7 +96,10 @@ void	define_token(t_data *data)
 		else
 			handle_redir_cmd(data, i);
 		if (data->token[i].tab)
+		{
 			i++;
+			data->cmd_count++;
+		}
 	}
 	define_build_in(data);
 }
