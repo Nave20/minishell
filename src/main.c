@@ -43,20 +43,6 @@ char	*put_token(t_data *data, int start, int end)
 	return (token);
 }
 
-bool	is_locked(char *tab, int c)
-{
-	int	i;
-
-	i = 1;
-	while (tab[i])
-	{
-		if (tab[i] == c)
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
 void	print_token(t_data *data)
 {
 	int	i;

@@ -1,6 +1,6 @@
 #include "../header/minishell.h"
 
-void	handle_redirout_cmd(t_data *data, int *i)
+static void	handle_redirout_cmd(t_data *data, int *i)
 {
 	if (data->token[*i].type == REDIR_OUT)
 	{
@@ -18,7 +18,7 @@ void	handle_redirout_cmd(t_data *data, int *i)
 	}
 }
 
-void	handle_redir_cmd(t_data *data, int end)
+static void	handle_redir_cmd(t_data *data, int end)
 {
 	int	i;
 
@@ -46,20 +46,6 @@ void	handle_redir_cmd(t_data *data, int end)
 	}
 }
 
-bool	is_build_in(char *cmd)
-{
-	if (ft_strncmp(cmd, "echo", ft_strlen("echo") + 1) == 0 || ft_strncmp(cmd,
-			"cd", ft_strlen("cd") + 1) == 0 || ft_strncmp(cmd, "export",
-			ft_strlen("export") + 1) == 0 || ft_strncmp(cmd, "unset",
-			ft_strlen("unset") + 1) == 0 || ft_strncmp(cmd, "env",
-			ft_strlen("env") + 1) == 0 || ft_strncmp(cmd, "exit",
-			ft_strlen("exit") + 1) == 0 || ft_strncmp(cmd, "pwd",
-			ft_strlen("pwd") + 1) == 0)
-		return (true);
-	else
-		return (false);
-}
-
 static void	handle_simple_cmd(t_data *data, int end)
 {
 	int	i;
@@ -76,23 +62,7 @@ static void	handle_simple_cmd(t_data *data, int end)
 	}
 }
 
-static bool	is_simple_cmd(t_data *data, int end)
-{
-	int	i;
-
-	i = 0;
-	while (i < end)
-	{
-		if (data->token[i].type == PIPE || data->token[i].type == REDIR_IN
-			|| data->token[i].type == REDIR_OUT || data->token[i].type == APPEND
-			|| data->token[i].type == HEREDOC)
-			return (false);
-		i++;
-	}
-	return (true);
-}
-
-void	define_build_in(t_data *data)
+static void	define_build_in(t_data *data)
 {
 	int	i;
 

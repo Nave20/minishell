@@ -6,7 +6,7 @@
 /*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/05/22 14:07:04 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:02:58 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@
 //-------------------------------STRUCTS-------------------------------
 typedef enum e_quote
 {
+	N_QUOTE,
 	S_QUOTE,
-	D_QUOTE,
-	N_QUOTE
+	D_QUOTE
 }					t_quote;
 typedef enum e_type
 {
@@ -86,5 +86,8 @@ int					tokenize_input(t_data *data, char *input);
 char				*put_token(t_data *data, int start, int end);
 bool				is_locked(char *tab, int c);
 void				define_token(t_data *data);
+bool				is_locked(char *tab, int c);
+bool				is_build_in(char *cmd);
+bool				is_simple_cmd(t_data *data, int end);
 
 #endif
