@@ -1,27 +1,50 @@
 #include "../header/minishell.h"
 
-// void	define_cmd(t_data *data)
-// {
-// 	int	i;
+void	handle_redirout_cmd(t_data *data, int *i)
+{
+	if (data->token[*i].type == REDIR_OUT)
+	{
+		data->token[*i + 1].type = OUTFILE;
+		(*i) += 2;
+		if (!data->token[*i].type)
+			data->token[*i].type = CMD;
+	}
+	if (data->token[*i].type == APPEND)
+	{
+		data->token[*i + 1].type = OUTFILE;
+		i += 2;
+		if (!data->token[*i].type)
+			data->token[*i].type = CMD;
+	}
+}
 
-// 	i = 1;
-// 	data->token[0].type = CMD;
-// 	while (data->token[i].tab)
-// 	{
-// 		i++;
-// 		if (data->token[i].type == PIPE)
-// 		{
-// 			i++;
-// 			if (data->token[i].tab)
-// 			{
-// 				if (!data->token[i].type)
-// 					data->token[i].type = CMD;
-// 				else
-// 					exit(EXIT_FAILURE); // gestion erreur
-// 			}
-// 		}
-// 	}
-// }
+void	handle_redir_cmd(t_data *data, int end)
+{
+	int	i;
+
+	i = 0;
+	if (!data->token[i].type)
+		data->token[i].type = CMD;
+	while (i < end)
+	{
+		if (data->token[i].type == REDIR_IN)
+		{
+			data->token[i + 1].type = INFILE;
+			i += 2;
+			if (!data->token[i].type)
+				data->token[i].type = CMD;
+		}
+		if (data->token[i].type == HEREDOC)
+		{
+			data->token[i + 1].type = DELIM;
+			i += 2;
+			if (!data->token[i].type)
+				data->token[i].type = CMD;
+		}
+		handle_redirout_cmd(data, &i);
+		i++;
+	}
+}
 
 bool	is_build_in(char *cmd)
 {
@@ -37,16 +60,13 @@ bool	is_build_in(char *cmd)
 		return (false);
 }
 
-static void	handle_simple_cmd(t_data *data)
+static void	handle_simple_cmd(t_data *data, int end)
 {
 	int	i;
 
 	i = 1;
-	if (is_build_in(data->token[0].tab))
-		data->token[0].type = CMD_BI;
-	else
-		data->token[0].type = CMD;
-	while (data->token[i].tab)
+	data->token[0].type = CMD;
+	while (i < end)
 	{
 		if (data->token[i].tab[0] == '-')
 			data->token[i].type = FLAG;
@@ -56,12 +76,12 @@ static void	handle_simple_cmd(t_data *data)
 	}
 }
 
-static bool	is_simple_cmd(t_data *data)
+static bool	is_simple_cmd(t_data *data, int end)
 {
 	int	i;
 
 	i = 0;
-	while (data->token[i].tab)
+	while (i < end)
 	{
 		if (data->token[i].type == PIPE || data->token[i].type == REDIR_IN
 			|| data->token[i].type == REDIR_OUT || data->token[i].type == APPEND
@@ -72,9 +92,41 @@ static bool	is_simple_cmd(t_data *data)
 	return (true);
 }
 
-void	define_token(t_data *data)
-// classer types cmd : avec ou sans pipe et/ou redirection
+void	define_build_in(t_data *data)
 {
-	if (is_simple_cmd(data))
-		handle_simple_cmd(data);
+	int	i;
+
+	i = 0;
+	while (data->token[i].tab)
+	{
+		if (data->token[i].type == CMD && is_build_in(data->token[i].tab))
+			data->token[i].type = CMD_BI;
+		i++;
+	}
+}
+
+void	define_token(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (data->token[i].tab)
+	{
+		if (data->token[i].tab[0] == '-')
+			data->token[i].type = FLAG;
+		i++;
+	}
+	i = 0;
+	while (data->token[i].tab)
+	{
+		while (data->token[i].tab && data->token[i].tab[0] != '|')
+			i++;
+		if (is_simple_cmd(data, i))
+			handle_simple_cmd(data, i);
+		else
+			handle_redir_cmd(data, i);
+		if (data->token[i].tab)
+			i++;
+	}
+	define_build_in(data);
 }

@@ -44,6 +44,7 @@ void	handle_special_c(t_data *data, int *nbword, int *i)
 	if (data->input[*i] == '|')
 	{
 		data->token[*nbword].tab = put_token(data, *i, *i);
+		data->token[*nbword].type = PIPE;
 		(*nbword)++;
 		(*i)++;
 		return ;
