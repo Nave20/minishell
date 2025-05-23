@@ -6,7 +6,7 @@
 /*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/05/22 15:41:26 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/05/23 13:00:58 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef enum e_quote
 	N_QUOTE,
 	S_QUOTE,
 	D_QUOTE
-}			t_quote;
+}						t_quote;
 typedef enum e_type
 {
 	CMD,
@@ -52,44 +52,45 @@ typedef enum e_type
 	HEREDOC,
 	REDIR_OUT,
 	APPEND
-}			t_type;
+}						t_type;
 typedef struct s_token
 {
-	int		quote;
-	int		type;
-	char	*tab;
-}			t_token;
-
-typedef struct s_cmd
+	int					quote;
+	int					type;
+	char				*tab;
+}						t_token;
+typedef struct s_cmd	t_cmd;
+struct					s_cmd
 {
-	char	*cmd;
-	char	*arg;
-	char	*opt;
-	int		infile;
-	int		outfile;
-	int		delim;
-	t_cmd	*next;
-}			t_cmd;
+	char				*cmd;
+	char				*cmd_bi;
+	char				*arg;
+	char				*flag;
+	char				*infile;
+	char				*outfile;
+	char *delim; // commmande : < dinfile  > outfile <<o < infile
+	t_cmd				*next;
+};
 
 typedef struct s_data
 {
-	char	*input;
-	int		cmd_count;
-	t_token	*token;
-	t_list	*cmd;
-}			t_data;
+	char				*input;
+	int					cmd_count;
+	t_token				*token;
+	t_cmd				*cmd;
+}						t_data;
 
 //--------------------------------MAIN---------------------------------
 
 //-------------------------------PARSING-------------------------------
-int			word_count(char *input);
-int			tokenize_input(t_data *data, char *input);
-char		*put_token(t_data *data, int start, int end);
-bool		is_locked(char *tab, int c);
-void		define_token(t_data *data);
-bool		is_locked(char *tab, int c);
-bool		is_build_in(char *cmd);
-bool		is_simple_cmd(t_data *data, int end);
-void		free_data(t_data *data);
+int						word_count(char *input);
+int						tokenize_input(t_data *data, char *input);
+char					*put_token(t_data *data, int start, int end);
+bool					is_locked(char *tab, int c);
+void					define_token(t_data *data);
+bool					is_locked(char *tab, int c);
+bool					is_build_in(char *cmd);
+bool					is_simple_cmd(t_data *data, int end);
+void					free_data(t_data *data);
 
 #endif

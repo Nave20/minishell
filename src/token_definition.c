@@ -4,17 +4,43 @@ static void	handle_redirout_cmd(t_data *data, int *i)
 {
 	if (data->token[*i].type == REDIR_OUT)
 	{
-		data->token[*i + 1].type = OUTFILE;
-		(*i) += 2;
-		if (!data->token[*i].type)
-			data->token[*i].type = CMD;
+		if (data->token[*i + 1].tab)
+		{
+			data->token[++(*i)].type = OUTFILE;
+			if (data->token[*i + 1].tab && !data->token[(*i) + 1].type)
+				data->token[++(*i)].type = CMD;
+		}
 	}
 	if (data->token[*i].type == APPEND)
 	{
-		data->token[*i + 1].type = OUTFILE;
-		i += 2;
-		if (!data->token[*i].type)
-			data->token[*i].type = CMD;
+		if (data->token[*i + 1].tab)
+		{
+			data->token[++(*i)].type = OUTFILE;
+			if (data->token[*i + 1].tab && !data->token[(*i) + 1].type)
+				data->token[++(*i)].type = CMD;
+		}
+	}
+}
+
+static void	handle_redirin_cmd(t_data *data, int *i)
+{
+	if (data->token[*i].type == REDIR_IN)
+	{
+		if (data->token[*i + 1].tab)
+		{
+			data->token[++(*i)].type = INFILE;
+			if (data->token[*i + 1].tab && !data->token[*i + 1].type)
+				data->token[++(*i)].type = CMD;
+		}
+	}
+	if (data->token[*i].type == HEREDOC)
+	{
+		if (data->token[*i + 1].tab)
+		{
+			data->token[++(*i)].type = DELIM;
+			if (data->token[*i + 1].tab && !data->token[*i + 1].type)
+				data->token[++(*i)].type = CMD;
+		}
 	}
 }
 
@@ -27,20 +53,7 @@ static void	handle_redir_cmd(t_data *data, int end)
 		data->token[i].type = CMD;
 	while (i < end)
 	{
-		if (data->token[i].type == REDIR_IN)
-		{
-			data->token[i + 1].type = INFILE;
-			i += 2;
-			if (!data->token[i].type)
-				data->token[i].type = CMD;
-		}
-		if (data->token[i].type == HEREDOC)
-		{
-			data->token[i + 1].type = DELIM;
-			i += 2;
-			if (!data->token[i].type)
-				data->token[i].type = CMD;
-		}
+		handle_redirin_cmd(data, &i);
 		handle_redirout_cmd(data, &i);
 		i++;
 	}
