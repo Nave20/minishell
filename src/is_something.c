@@ -7,9 +7,8 @@ bool	is_simple_cmd(t_data *data, int end)
 	i = 0;
 	while (i < end)
 	{
-		if (data->token[i].type == PIPE || data->token[i].type == REDIR_IN
-			|| data->token[i].type == REDIR_OUT || data->token[i].type == APPEND
-			|| data->token[i].type == HEREDOC)
+		if (data->token[i].type == REDIR_IN || data->token[i].type == REDIR_OUT
+			|| data->token[i].type == APPEND || data->token[i].type == HEREDOC)
 			return (false);
 		i++;
 	}

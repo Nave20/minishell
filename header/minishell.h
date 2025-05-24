@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucasp <lucasp@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/05/23 13:00:58 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/05/24 18:18:28 by lucasp           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,16 @@ typedef enum e_type
 	REDIR_OUT,
 	APPEND
 }						t_type;
-typedef struct s_token
+typedef struct s_cmd	t_cmd;
+typedef struct s_token	t_token;
+typedef struct s_data	t_data;
+struct					s_token
 {
 	int					quote;
 	int					type;
 	char				*tab;
-}						t_token;
-typedef struct s_cmd	t_cmd;
+};
+
 struct					s_cmd
 {
 	char				*cmd;
@@ -68,17 +71,17 @@ struct					s_cmd
 	char				*flag;
 	char				*infile;
 	char				*outfile;
-	char *delim; // commmande : < dinfile  > outfile <<o < infile
+	char				*delim;
 	t_cmd				*next;
 };
 
-typedef struct s_data
+struct					s_data
 {
 	char				*input;
 	int					cmd_count;
 	t_token				*token;
 	t_cmd				*cmd;
-}						t_data;
+};
 
 //--------------------------------MAIN---------------------------------
 
@@ -92,5 +95,7 @@ bool					is_locked(char *tab, int c);
 bool					is_build_in(char *cmd);
 bool					is_simple_cmd(t_data *data, int end);
 void					free_data(t_data *data);
+void					set_infile(t_data *data);
+void					set_outfile(t_data *data);
 
 #endif
