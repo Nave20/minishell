@@ -19,6 +19,7 @@ void	terminal(t_all all)
 {
 	char	*input;
 
+	(void) all;
 	while (true)
 	{
 		input = readline(CYAN UNDER BOLD"MiniShell:"RESET);
@@ -26,6 +27,7 @@ void	terminal(t_all all)
 			break ;
 		if (*input)
 			add_history(input);
+		hub(all, input);
 		printf("%s\n", input);
 		free(input);
 	}
