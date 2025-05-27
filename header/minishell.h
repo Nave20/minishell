@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucasp <lucasp@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/05/24 18:18:28 by lucasp           ###   ########.fr       */
+/*   Updated: 2025/05/27 16:44:34 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,9 @@ bool					is_locked(char *tab, int c);
 bool					is_build_in(char *cmd);
 bool					is_simple_cmd(t_data *data, int end);
 void					free_data(t_data *data);
+void					set_infile(t_data *data);
+void					set_outfile(t_data *data);
+void					create_cmd_lst(t_data *data);
 void					set_infile(t_data *data);
 void					set_outfile(t_data *data);
 

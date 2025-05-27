@@ -74,7 +74,7 @@ int	main(void)
 		free(data.input);
 		data.cmd_count = 1;
 		define_token(&data);
-		// create_cmd_lst(&data);
+		create_cmd_lst(&data);
 		print_token(&data);
 		free_data(&data);
 	}

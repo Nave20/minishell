@@ -1,15 +1,15 @@
 #include "../header/minishell.h"
 
-void	set_cmd_lst(t_data *data)
+static void	set_cmd_lst(t_data *data)
 {
 	int		i;
 	t_cmd	*cmd;
 
 	i = 0;
 	cmd = data->cmd;
-	set_infile(data);
-	set_outfile(data);
-	set_heredoc(data);
+	// set_heredoc(data);
+	// set_infile(data);
+	// set_outfile(data);
 	while (data->token[i].tab && data->token[i].type != PIPE)
 	{
 		if (data->token[i].type == CMD)
@@ -20,12 +20,6 @@ void	set_cmd_lst(t_data *data)
 			cmd->arg = data->token[i].tab;
 		if (data->token[i].type == FLAG)
 			cmd->flag = data->token[i].tab;
-		// if (data->token[i].type == INFILE)
-		// 	find_infile(data);
-		// if (data->token[i].type == OUTFILE)
-		// 	find_outfile(data);
-		// if (data->token[i].type == DELIM)
-		// 	cmd->delim = data->token[i].tab;
 		i++;
 		if (data->token[i].type == PIPE)
 		{
@@ -35,7 +29,7 @@ void	set_cmd_lst(t_data *data)
 	}
 }
 
-void	set_lst_null(t_cmd *cmd)
+static void	set_lst_null(t_cmd *cmd)
 {
 	cmd->cmd = NULL;
 	cmd->cmd_bi = NULL;
