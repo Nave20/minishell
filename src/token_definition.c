@@ -44,34 +44,26 @@ static void	handle_redirin_cmd(t_data *data, int *i)
 	}
 }
 
-static void	handle_redir_cmd(t_data *data, int end)
+static void	handle_redir_cmd(t_data *data, int start, int end)
 {
-	int	i;
-
-	i = 0;
-	if (!data->token[i].type)
-		data->token[i].type = CMD;
-	while (i < end)
+	if (!data->token[start].type)
+		data->token[start].type = CMD;
+	while (start < end)
 	{
-		handle_redirin_cmd(data, &i);
-		handle_redirout_cmd(data, &i);
-		i++;
+		handle_redirin_cmd(data, &start);
+		handle_redirout_cmd(data, &start);
+		start++;
 	}
 }
 
-static void	handle_simple_cmd(t_data *data, int end)
+static void	handle_simple_cmd(t_data *data, int start, int end)
 {
-	int	i;
-
-	i = 1;
-	data->token[0].type = CMD;
-	while (i < end)
+	data->token[start].type = CMD;
+	start++;
+	while (start < end)
 	{
-		if (data->token[i].tab[0] == '-')
-			data->token[i].type = FLAG;
-		else
-			data->token[i].type = ARG;
-		i++;
+		data->token[start].type = STR;
+		start++;
 	}
 }
 
@@ -91,28 +83,31 @@ static void	define_build_in(t_data *data)
 void	define_token(t_data *data)
 {
 	int	i;
+	int	j;
 
 	i = 0;
-	while (data->token[i].tab)
-	{
-		if (data->token[i].tab[0] == '-')
-			data->token[i].type = FLAG;
-		i++;
-	}
-	i = 0;
+	j = 0;
 	while (data->token[i].tab)
 	{
 		while (data->token[i].tab && data->token[i].tab[0] != '|')
 			i++;
 		if (is_simple_cmd(data, i))
-			handle_simple_cmd(data, i);
+			handle_simple_cmd(data, j, i);
 		else
-			handle_redir_cmd(data, i);
+			handle_redir_cmd(data, j, i);
 		if (data->token[i].tab)
 		{
 			i++;
+			j = i;
 			data->cmd_count++;
 		}
+	}
+	i = 0;
+	while (data->token[i].tab)
+	{
+		if (!data->token[i].type)
+			data->token[i].type = STR;
+		i++;
 	}
 	define_build_in(data);
 }
