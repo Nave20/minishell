@@ -16,10 +16,8 @@ static void	set_cmd_lst(t_data *data)
 			cmd->cmd = data->token[i].tab;
 		if (data->token[i].type == CMD_BI)
 			cmd->cmd_bi = data->token[i].tab;
-		if (data->token[i].type == ARG)
-			cmd->arg = data->token[i].tab;
-		if (data->token[i].type == FLAG)
-			cmd->flag = data->token[i].tab;
+		if (data->token[i].type == STR)
+			cmd->str = data->token[i].tab;
 		i++;
 		if (data->token[i].type == PIPE)
 		{
@@ -33,8 +31,7 @@ static void	set_lst_null(t_cmd *cmd)
 {
 	cmd->cmd = NULL;
 	cmd->cmd_bi = NULL;
-	cmd->arg = NULL;
-	cmd->flag = NULL;
+	cmd->str = NULL;
 	cmd->infile = NULL;
 	cmd->outfile = NULL;
 	cmd->delim = NULL;

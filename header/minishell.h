@@ -6,7 +6,7 @@
 /*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/05/27 17:13:07 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/05/27 17:21:44 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,7 @@ struct					s_cmd
 {
 	char				*cmd;
 	char				*cmd_bi;
-	char				*arg;
-	char				*flag;
+	char				*str;
 	char				*infile;
 	char				*outfile;
 	char				*delim;
