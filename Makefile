@@ -7,10 +7,24 @@ LIB             = libft/libft.a
 BUILTINS_DIR    = $(SRC_DIR)builtins/
 BUILTINS_OBJDIR = $(OBJ_DIR)builtins/
 
-SRC_FILES       = minishell.c
-BUILTINS_FILES  = 	echo.c	\
-					pwd.c	\
-					env.c	\
+SRC_FILES       =	minishell.c			\
+					pars_env.c			\
+					dev_func.c			\
+					terminal.c			\
+					main.c				\
+					word_count.c		\
+					tokenization.c		\
+					token_definition.c	\
+					is_something.c		\
+
+BUILTINS_FILES  = 	echo.c		\
+					cd.c		\
+					pwd.c		\
+					env.c		\
+					export.c	\
+					unset.c		\
+					exit.c		\
+					hub.c		\
 
 SOURCES         = $(addprefix $(SRC_DIR), $(SRC_FILES)) \
                   $(addprefix $(BUILTINS_DIR), $(BUILTINS_FILES))
@@ -21,7 +35,7 @@ OBJS            = $(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o)) \
 HEADER          = $(INC_DIR)minishell.h
 NAME            = minishell
 
-CC              = cc
+CC              = gcc
 FLAGS           = -Wall -Wextra -Werror -I$(INC_DIR)
 
 all: $(NAME)
@@ -35,7 +49,7 @@ $(BUILTINS_OBJDIR)%.o: $(BUILTINS_DIR)%.c $(HEADER)
 	$(CC) $(FLAGS) -c $< -o $@
 
 $(NAME): $(OBJS) $(LIB) $(HEADER) Makefile
-	$(CC) $(FLAGS) -o $@ $(OBJS) $(LIB)
+	$(CC) $(FLAGS) -o $@ $(OBJS) -lreadline $(LIB)
 
 $(LIB):
 	make -C libft
