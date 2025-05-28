@@ -6,7 +6,7 @@
 /*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/05/27 17:21:44 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:43:33 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # include "../libft/libft.h"
 # include <errno.h>
 # include <fcntl.h>
+# include <readline/history.h>
+# include <readline/readline.h>
 # include <stdbool.h>
 # include <stdint.h>
 # include <stdio.h>
@@ -67,9 +69,10 @@ struct					s_cmd
 {
 	char				*cmd;
 	char				*cmd_bi;
-	char				*str;
-	char				*infile;
-	char				*outfile;
+	char				**str;
+	char				*hrdc_path;
+	int					infile;
+	int					outfile;
 	char				*delim;
 	t_cmd				*next;
 };
@@ -99,5 +102,7 @@ void					set_outfile(t_data *data);
 void					create_cmd_lst(t_data *data);
 void					set_infile(t_data *data);
 void					set_outfile(t_data *data);
+void					set_heredoc(t_data *data);
+bool					is_last_outf_hrdc(t_data *data, int start, int end);
 
 #endif

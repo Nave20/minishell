@@ -58,14 +58,15 @@ void	set_outfile(t_data *data)
 	}
 }
 
-static int	set_redir_in(t_data *data, int fd, int *i)
+static int	set_redir_in(t_data *data, int fd, int *i, int hrdc)
 {
 	if (data->token[*i + 1].tab)
 	{
 		if (fd)
 			close(fd);
 		fd = open(data->token[++(*i)].tab, O_RDONLY);
-		data->cmd->infile = fd;
+		if (hrdc == 0)
+			data->cmd->infile = fd;
 	}
 	else
 		return (-1);
@@ -77,14 +78,19 @@ void	set_infile(t_data *data)
 	int		i;
 	t_cmd	*cmd;
 	int		fd;
+	int		is_outf_hrdc;
 
 	i = 0;
+	is_outf_hrdc = 1;
+	fd = 0;
 	cmd = data->cmd;
+	if (!cmd->hrdc_path)
+		is_outf_hrdc = 0;
 	while (data->token[i].tab && data->token[i].type != PIPE)
 	{
 		if (data->token[i].type == REDIR_IN)
 		{
-			if (set_redir_in(data, fd, &i) == -1)
+			if (set_redir_in(data, fd, &i, is_outf_hrdc) == -1)
 				return ; // pas de fichier redirin, erreur
 		}
 		i++;

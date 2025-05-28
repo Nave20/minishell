@@ -42,3 +42,21 @@ bool	is_locked(char *tab, int c)
 	}
 	return (false);
 }
+
+bool	is_last_outf_hrdc(t_data *data, int start, int end)
+{
+	int type_outf;
+
+	while (start < end)
+	{
+		if (data->token[start].type == REDIR_IN)
+			type_outf = data->token[start].type;
+		if (data->token[start].type == HEREDOC)
+			type_outf = data->token[start].type;
+		start++;
+	}
+	if (type_outf == HEREDOC)
+		return (1);
+	else
+		return (0);
+}

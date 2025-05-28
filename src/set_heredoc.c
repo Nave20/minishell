@@ -1,32 +1,70 @@
 #include "../header/minishell.h"
 
-void	open_heredoc(t_data *data, char *delim)
+static void	open_heredoc(t_data *data, t_cmd *cmd, char *delim, int i_hrdc)
 {
-	char	*input;
-	int		fd;
+	char		*input;
+	static int	fd;
+	char		*str;
+	char		*f_name;
 
-	input = read_line("heredoc> ");
-	fd = open();
+	(void)data;
+	if (fd != 0 && cmd->outfile)
+		unlink(f_name);
+	input = readline("heredoc> ");
+	str = "/tmp/heredoc";
+	f_name = ft_strjoin(str, ft_itoa(i_hrdc));
+	if (!f_name)
+		return ; // erreur malloc
+	fd = open(f_name, O_CREAT | O_WRONLY | O_TRUNC, 0600);
 	while (ft_strncmp(input, delim, ft_strlen(delim)) != 0)
 	{
+		ft_putstr_fd(input, fd);
 		free(input);
-		input = read_line("heredoc> ");
+		input = readline("heredoc> ");
 	}
+	cmd->hrdc_path = f_name;
+	free(input);
+	close(fd);
+	free(f_name);
+	cmd->infile = fd;
 }
 
 void	set_heredoc(t_data *data)
 {
-	int	i;
+	int		i;
+	int		j;
+	int		i_hrdc;
+	t_cmd	*cmd;
 
 	i = 0;
+	j = 0;
+	i_hrdc = 0;
+	cmd = data->cmd;
 	while (data->token[i].tab)
 	{
 		if (data->token[i].type == HEREDOC)
 		{
 			if (data->token[i + 1].type == DELIM)
-				open_heredoc(data, data->token[i + 1].tab);
+				open_heredoc(data, cmd, data->token[i + 1].tab, i_hrdc);
 			else
 				return ; // pas de delim, erreur
+			i_hrdc++;
+		}
+		i++;
+		if (data->token[i].type == PIPE || !data->token[i].tab)
+		{
+			if (!is_last_outf_hrdc(data, j, i))
+			{
+				unlink(cmd->hrdc_path);
+				free(cmd->hrdc_path);
+				cmd->hrdc_path = NULL;
+			}
+			if (data->token[i].type == PIPE)
+			{
+				j = i;
+				i++;
+				cmd = data->cmd->next;
+			}
 		}
 	}
 }
