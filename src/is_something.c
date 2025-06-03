@@ -43,10 +43,11 @@ bool	is_locked(char *tab, int c)
 	return (false);
 }
 
-bool	is_last_outf_hrdc(t_data *data, int start, int end)
+bool	is_last_inf_hrdc(t_data *data, int start, int end)
 {
-	int type_outf;
+	int	type_outf;
 
+	type_outf = 0;
 	while (start < end)
 	{
 		if (data->token[start].type == REDIR_IN)

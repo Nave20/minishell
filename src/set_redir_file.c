@@ -32,29 +32,24 @@ void	set_outfile(t_data *data)
 {
 	int		i;
 	t_cmd	*cmd;
-	int		fd;
 
 	i = 0;
-	fd = 0;
 	cmd = data->cmd;
-	while (data->token[i].tab && data->token[i].type != PIPE)
+	while (data->token[i].tab)
 	{
 		if (data->token[i].type == REDIR_OUT)
 		{
-			if (set_redir_out(data, fd, &i) == -1)
+			if (set_redir_out(data, cmd->outfile, &i) == -1)
 				return ; // pas de fichier redirout, erreur
 		}
 		if (data->token[i].type == APPEND)
 		{
-			if (set_append_file(data, fd, &i) == -1)
+			if (set_append_file(data, cmd->outfile, &i) == -1)
 				return ; // pas de fihicer append, erreur
 		}
-		i++;
 		if (data->token[i].type == PIPE)
-		{
-			i++;
-			cmd = data->cmd->next;
-		}
+			cmd = cmd->next;
+		i++;
 	}
 }
 
@@ -77,27 +72,22 @@ void	set_infile(t_data *data)
 {
 	int		i;
 	t_cmd	*cmd;
-	int		fd;
 	int		is_outf_hrdc;
 
 	i = 0;
 	is_outf_hrdc = 1;
-	fd = 0;
 	cmd = data->cmd;
 	if (!cmd->hrdc_path)
 		is_outf_hrdc = 0;
-	while (data->token[i].tab && data->token[i].type != PIPE)
+	while (data->token[i].tab)
 	{
 		if (data->token[i].type == REDIR_IN)
 		{
-			if (set_redir_in(data, fd, &i, is_outf_hrdc) == -1)
+			if (set_redir_in(data, cmd->infile, &i, is_outf_hrdc) == -1)
 				return ; // pas de fichier redirin, erreur
 		}
-		i++;
 		if (data->token[i].type == PIPE)
-		{
-			i++;
-			cmd = data->cmd->next;
-		}
+			cmd = cmd->next;
+		i++;
 	}
 }

@@ -3,31 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vpirotti <vpirotti@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 14:07:12 by vpirotti          #+#    #+#             */
-/*   Updated: 2024/11/18 14:07:12 by vpirotti         ###   ########.fr       */
+/*   Updated: 2025/05/30 12:22:08 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stdio.h>
 
-static char	*intmin(char *res)
-{
-	res[1] = '2';
-	res[2] = '1';
-	res[3] = '4';
-	res[4] = '7';
-	res[5] = '4';
-	res[6] = '8';
-	res[7] = '3';
-	res[8] = '6';
-	res[9] = '4';
-	res[10] = '8';
-	res[11] = 0;
-	return (res);
-}
+// static char	*intmin(char *res)
+// {
+// 	res[1] = '2';
+// 	res[2] = '1';
+// 	res[3] = '4';
+// 	res[4] = '7';
+// 	res[5] = '4';
+// 	res[6] = '8';
+// 	res[7] = '3';
+// 	res[8] = '6';
+// 	res[9] = '4';
+// 	res[10] = '8';
+// 	res[11] = 0;
+// 	return (res);
+// }
 
 static int	ft_size(int n)
 {
@@ -78,15 +78,15 @@ char	*ft_itoa(int n)
 		sign += 1;
 		n *= -1;
 	}
-	res = (char *) malloc ((len + sign + 1) * sizeof(char));
+	res = (char *)ft_calloc((len + sign + 1), sizeof(char));
 	if (!res)
 		return (NULL);
+	if (n == -2147483648)
+		return (ft_strdup("-2147483648"));
 	if (sign == 1)
 	{
 		res[0] = '-';
 	}
-	if (n == -2147483648)
-		res = intmin(res);
 	else
 		ft_filler(n, res, len);
 	return (res);

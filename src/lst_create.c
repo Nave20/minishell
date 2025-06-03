@@ -46,14 +46,51 @@ void	ft_cmdadd_back(t_cmd **lst, t_cmd *new)
 void	print_lst(t_data *data)
 {
 	t_cmd	*cmd;
+	int		i;
 
+	i = 0;
 	cmd = data->cmd;
 	while (data->cmd != NULL)
 	{
-		printf("cmd = %s\ncmd_bi = %s\nhrdc_path = %s, delim = %s\n", cmd->cmd,
-			cmd->cmd_bi, cmd->hrdc_path, cmd->delim);
-		printf("infile fd = %d\noutfile fd = %d", cmd->infile, cmd->outfile);
+		printf("cmd = %s\ncmd_bi = %s\nhrdc_path = %s\n", cmd->cmd, cmd->cmd_bi,
+			cmd->hrdc_path);
+		printf("infile fd = %d\noutfile fd = %d\n", cmd->infile, cmd->outfile);
+		while (cmd->str[i])
+		{
+			printf("str = %s\n", cmd->str[i]);
+			i++;
+		}
+		i = 0;
+		cmd = cmd->next;
+		if (!cmd->next)
+			return ;
 	}
+}
+
+void	set_str(t_data *data)
+{
+	int		i;
+	int		str_count;
+	t_cmd	*cmd;
+
+	i = 0;
+	cmd = data->cmd;
+	str_count = 0;
+	while (data->token[i].tab)
+	{
+		if (data->token[i].type == STR)
+			str_count++;
+		if (data->token[i].type == PIPE)
+		{
+			if (str_count)
+				cmd->str = ft_calloc(str_count + 1, sizeof(char *));
+			str_count = 0;
+			cmd = cmd->next;
+		}
+		i++;
+	}
+	if (str_count)
+		cmd->str = ft_calloc(str_count + 1, sizeof(char *));
 }
 
 static void	set_cmd_lst(t_data *data)
@@ -65,24 +102,30 @@ static void	set_cmd_lst(t_data *data)
 	i = 0;
 	j = 0;
 	cmd = data->cmd;
+	printf("[ESSAI] : infile = %d, outfile = %d\n", cmd->infile, cmd->outfile);
 	set_heredoc(data);
 	set_infile(data);
 	set_outfile(data);
-	while (data->token[i].tab && data->token[i].type != PIPE)
+	set_str(data);
+	while (data->token[i].tab)
 	{
 		if (data->token[i].type == CMD)
 			cmd->cmd = data->token[i].tab;
 		if (data->token[i].type == CMD_BI)
 			cmd->cmd_bi = data->token[i].tab;
 		if (data->token[i].type == STR)
+		{
 			cmd->str[j] = data->token[i].tab;
-		i++;
+			j++;
+		}
 		if (data->token[i].type == PIPE)
 		{
-			i++;
-			cmd = data->cmd->next;
+			j = 0;
+			cmd = cmd->next;
 		}
+		i++;
 	}
+	print_lst(data);
 }
 
 void	create_cmd_lst(t_data *data)
