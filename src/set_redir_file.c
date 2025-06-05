@@ -1,27 +1,31 @@
 #include "../header/minishell.h"
 
-static int	set_append_file(t_data *data, int fd, int *i)
+static int	set_append_file(t_data *data, t_cmd *cmd, int *i)
 {
+	int	fd;
+
 	if (data->token[*i].tab)
 	{
-		if (fd)
-			close(fd);
+		if (cmd->outfile)
+			close(cmd->outfile);
 		fd = open(data->token[++(*i)].tab, O_WRONLY | O_CREAT | O_APPEND);
-		data->cmd->outfile = fd;
+		cmd->outfile = fd;
 	}
 	else
 		return (-1);
 	return (0);
 }
 
-static int	set_redir_out(t_data *data, int fd, int *i)
+static int	set_redir_out(t_data *data, t_cmd *cmd, int *i)
 {
+	int	fd;
+
 	if (data->token[*i].tab)
 	{
-		if (fd)
-			close(fd);
+		if (cmd->outfile)
+			close(cmd->outfile);
 		fd = open(data->token[++(*i)].tab, O_WRONLY | O_CREAT | O_TRUNC);
-		data->cmd->outfile = fd;
+		cmd->outfile = fd;
 	}
 	else
 		return (-1);
@@ -39,12 +43,12 @@ void	set_outfile(t_data *data)
 	{
 		if (data->token[i].type == REDIR_OUT)
 		{
-			if (set_redir_out(data, cmd->outfile, &i) == -1)
+			if (set_redir_out(data, cmd, &i) == -1)
 				return ; // pas de fichier redirout, erreur
 		}
 		if (data->token[i].type == APPEND)
 		{
-			if (set_append_file(data, cmd->outfile, &i) == -1)
+			if (set_append_file(data, cmd, &i) == -1)
 				return ; // pas de fihicer append, erreur
 		}
 		if (data->token[i].type == PIPE)
@@ -53,15 +57,17 @@ void	set_outfile(t_data *data)
 	}
 }
 
-static int	set_redir_in(t_data *data, int fd, int *i, int hrdc)
+static int	set_redir_in(t_data *data, t_cmd *cmd, int *i, int hrdc)
 {
+	int	fd;
+
 	if (data->token[*i + 1].tab)
 	{
-		if (fd)
-			close(fd);
+		if (cmd->infile)
+			close(cmd->infile);
 		fd = open(data->token[++(*i)].tab, O_RDONLY);
 		if (hrdc == 0)
-			data->cmd->infile = fd;
+			cmd->infile = fd;
 	}
 	else
 		return (-1);
@@ -83,7 +89,7 @@ void	set_infile(t_data *data)
 	{
 		if (data->token[i].type == REDIR_IN)
 		{
-			if (set_redir_in(data, cmd->infile, &i, is_outf_hrdc) == -1)
+			if (set_redir_in(data, cmd, &i, is_outf_hrdc) == -1)
 				return ; // pas de fichier redirin, erreur
 		}
 		if (data->token[i].type == PIPE)
