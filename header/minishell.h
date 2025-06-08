@@ -6,7 +6,7 @@
 /*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/06/08 12:56:56 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/06/08 13:53:34 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ bool					is_locked(char *tab, int c);
 bool					is_build_in(char *cmd);
 bool					is_simple_cmd(t_data *data, int end);
 void					free_data(t_data *data);
+void					set_env_var(t_data *data);
 void					create_cmd_lst(t_data *data);
 t_cmd					*ft_cmdnew(void);
 void					ft_cmdadd_back(t_cmd **lst, t_cmd *new);

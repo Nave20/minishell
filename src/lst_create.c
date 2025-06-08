@@ -12,15 +12,18 @@ static void	print_lst(t_data *data)
 		printf("cmd = %s\ncmd_bi = %s\nhrdc_path = %s\n", cmd->cmd, cmd->cmd_bi,
 			cmd->hrdc_path);
 		printf("infile fd = %d\noutfile fd = %d\n", cmd->infile, cmd->outfile);
-		while (cmd->str[i])
+		if (cmd->str)
 		{
-			printf("str = %s\n", cmd->str[i]);
-			i++;
+			while (cmd->str[i])
+			{
+				printf("str = %s\n", cmd->str[i]);
+				i++;
+			}
 		}
 		i = 0;
-		cmd = cmd->next;
 		if (!cmd->next)
 			return ;
+		cmd = cmd->next;
 	}
 }
 

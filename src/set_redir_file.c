@@ -9,6 +9,8 @@ static int	set_append_file(t_data *data, t_cmd *cmd, int *i)
 		if (cmd->outfile)
 			close(cmd->outfile);
 		fd = open(data->token[++(*i)].tab, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (fd == -1)
+			return (-1); // gestion erreur
 		cmd->outfile = fd;
 	}
 	else
@@ -25,6 +27,8 @@ static int	set_redir_out(t_data *data, t_cmd *cmd, int *i)
 		if (cmd->outfile)
 			close(cmd->outfile);
 		fd = open(data->token[++(*i)].tab, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (fd == -1)
+			return (-1); // gestion erreur
 		cmd->outfile = fd;
 	}
 	else
@@ -66,6 +70,8 @@ static int	set_redir_in(t_data *data, t_cmd *cmd, int *i, int hrdc)
 		if (cmd->infile)
 			close(cmd->infile);
 		fd = open(data->token[++(*i)].tab, O_RDONLY);
+		if (fd == -1)
+			return (-1); // gestion erreur
 		if (hrdc == 0)
 			cmd->infile = fd;
 	}

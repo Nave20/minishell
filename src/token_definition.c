@@ -50,4 +50,5 @@ void	define_token(t_data *data)
 	}
 	define_str(data);
 	define_build_in(data);
+	set_env_var(data);
 }

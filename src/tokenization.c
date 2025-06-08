@@ -8,10 +8,10 @@ int	handle_quote(t_data *data, int *nbword, int quote, int *i)
 	if (!is_locked(data->input + (*i), quote))
 		return (-1); // a completer avec erreur correspondante
 	(*i)++;
-	start = *i;
+	start = (*i) - 1;
 	while (data->input[*i] != quote)
 		(*i)++;
-	end = (*i) - 1;
+	end = (*i);
 	data->token[*nbword].tab = put_token(data, start, end);
 	// copie le token entre quotes dans tab
 	if (quote == '\'')
