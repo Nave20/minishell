@@ -6,7 +6,7 @@
 /*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/06/08 13:53:34 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/06/08 18:04:30 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ int						word_count(char *input);
 int						tokenize_input(t_data *data, char *input);
 char					*put_token(t_data *data, int start, int end);
 bool					is_locked(char *tab, int c);
+bool					is_operator(char *str);
+void					operator_check(t_data *data);
 void					define_token(t_data *data);
 void					handle_simple_cmd(t_data *data, int start, int end);
 void					handle_redir_cmd(t_data *data, int start, int end);
