@@ -6,7 +6,7 @@
 /*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/06/03 14:45:32 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/06/08 12:56:56 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,13 +92,20 @@ int						tokenize_input(t_data *data, char *input);
 char					*put_token(t_data *data, int start, int end);
 bool					is_locked(char *tab, int c);
 void					define_token(t_data *data);
+void					handle_simple_cmd(t_data *data, int start, int end);
+void					handle_redir_cmd(t_data *data, int start, int end);
+void					handle_redirin_cmd(t_data *data, int *i);
+void					handle_redirout_cmd(t_data *data, int *i);
 bool					is_locked(char *tab, int c);
 bool					is_build_in(char *cmd);
 bool					is_simple_cmd(t_data *data, int end);
 void					free_data(t_data *data);
+void					create_cmd_lst(t_data *data);
+t_cmd					*ft_cmdnew(void);
+void					ft_cmdadd_back(t_cmd **lst, t_cmd *new);
+t_cmd					*ft_cmdlast(t_cmd *lst);
 void					set_infile(t_data *data);
 void					set_outfile(t_data *data);
-void					create_cmd_lst(t_data *data);
 void					set_infile(t_data *data);
 void					set_outfile(t_data *data);
 void					set_heredoc(t_data *data);

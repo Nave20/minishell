@@ -1,49 +1,6 @@
 #include "../header/minishell.h"
 
-t_cmd	*ft_cmdlast(t_cmd *lst)
-{
-	t_cmd	*ptr;
-
-	ptr = lst;
-	if (!lst)
-		return (NULL);
-	while (ptr->next != NULL)
-	{
-		ptr = ptr->next;
-	}
-	return (ptr);
-}
-
-t_cmd	*ft_cmdnew(void)
-{
-	t_cmd	*new;
-
-	new = ft_calloc(1, sizeof(t_cmd));
-	if (!new)
-		return (NULL);
-	new->next = NULL;
-	return (new);
-}
-
-void	ft_cmdadd_back(t_cmd **lst, t_cmd *new)
-{
-	t_cmd	*ptr;
-
-	if (lst)
-	{
-		if (*lst == NULL)
-		{
-			*lst = new;
-		}
-		else
-		{
-			ptr = ft_cmdlast(*lst);
-			ptr->next = new;
-		}
-	}
-}
-
-void	print_lst(t_data *data)
+static void	print_lst(t_data *data)
 {
 	t_cmd	*cmd;
 	int		i;
@@ -67,7 +24,36 @@ void	print_lst(t_data *data)
 	}
 }
 
-void	set_str(t_data *data)
+static void	set_cmd_str(t_data *data)
+{
+	int		i;
+	int		j;
+	t_cmd	*cmd;
+
+	i = 0;
+	j = 0;
+	cmd = data->cmd;
+	while (data->token[i].tab)
+	{
+		if (data->token[i].type == CMD)
+			cmd->cmd = data->token[i].tab;
+		if (data->token[i].type == CMD_BI)
+			cmd->cmd_bi = data->token[i].tab;
+		if (data->token[i].type == STR)
+		{
+			cmd->str[j] = data->token[i].tab;
+			j++;
+		}
+		if (data->token[i].type == PIPE)
+		{
+			j = 0;
+			cmd = cmd->next;
+		}
+		i++;
+	}
+}
+
+static void	set_str(t_data *data)
 {
 	int		i;
 	int		str_count;
@@ -95,36 +81,11 @@ void	set_str(t_data *data)
 
 static void	set_cmd_lst(t_data *data)
 {
-	int		i;
-	int		j;
-	t_cmd	*cmd;
-
-	i = 0;
-	j = 0;
-	cmd = data->cmd;
-	printf("[ESSAI] : infile = %d, outfile = %d\n", cmd->infile, cmd->outfile);
 	set_heredoc(data);
 	set_infile(data);
 	set_outfile(data);
 	set_str(data);
-	while (data->token[i].tab)
-	{
-		if (data->token[i].type == CMD)
-			cmd->cmd = data->token[i].tab;
-		if (data->token[i].type == CMD_BI)
-			cmd->cmd_bi = data->token[i].tab;
-		if (data->token[i].type == STR)
-		{
-			cmd->str[j] = data->token[i].tab;
-			j++;
-		}
-		if (data->token[i].type == PIPE)
-		{
-			j = 0;
-			cmd = cmd->next;
-		}
-		i++;
-	}
+	set_cmd_str(data);
 	print_lst(data);
 }
 
