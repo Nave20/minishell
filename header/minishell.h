@@ -6,7 +6,7 @@
 /*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/06/08 18:04:30 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/06/10 12:39:42 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,22 @@ typedef enum e_type
 	REDIR_OUT,
 	APPEND
 }						t_type;
-typedef struct s_cmd	t_cmd;
-typedef struct s_token	t_token;
 typedef struct s_data	t_data;
+typedef struct s_token	t_token;
+typedef struct s_cmd	t_cmd;
+struct					s_data
+{
+	char				*input;
+	int					cmd_count;
+	t_token				*token;
+	t_cmd				*cmd;
+};
 struct					s_token
 {
 	int					quote;
 	int					type;
 	char				*tab;
 };
-
 struct					s_cmd
 {
 	char				*cmd;
@@ -74,14 +80,6 @@ struct					s_cmd
 	int					infile;
 	int					outfile;
 	t_cmd				*next;
-};
-
-struct					s_data
-{
-	char				*input;
-	int					cmd_count;
-	t_token				*token;
-	t_cmd				*cmd;
 };
 
 //--------------------------------MAIN---------------------------------
@@ -102,6 +100,10 @@ bool					is_locked(char *tab, int c);
 bool					is_build_in(char *cmd);
 bool					is_simple_cmd(t_data *data, int end);
 void					free_data(t_data *data);
+void					free_token(t_data *data);
+void					free_cmd(t_data *data);
+void					free_cmd_content(t_cmd *cmd);
+void					free_double_tab(char **str);
 void					set_env_var(t_data *data);
 void					create_cmd_lst(t_data *data);
 t_cmd					*ft_cmdnew(void);

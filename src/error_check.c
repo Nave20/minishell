@@ -9,8 +9,8 @@ void	operator_check(t_data *data)
 	{
 		if (data->token[i].tab[0] == '|')
 		{
-			if (i == 0 || !data->token[i + 1].tab || is_operator(data->token[i
-					+ 1].tab))
+			if (!data->token[i + 1].tab || data->token[i + 1].tab[0] == '|'
+				|| i == 0)
 				return ; // bash: syntax error near unexpected token `|'
 		}
 		if (data->token[i].tab[0] == '<')

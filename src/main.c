@@ -1,24 +1,5 @@
 #include "../header/minishell.h"
 
-void	free_data(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	if (data)
-	{
-		if (data->token)
-		{
-			while (data->token[i].tab)
-			{
-				free(data->token[i].tab);
-				i++;
-			}
-			free(data->token);
-		}
-	}
-}
-
 char	*put_token(t_data *data, int start, int end)
 {
 	char	*token;
@@ -70,6 +51,7 @@ int	main(void)
 		if (tokenize_input(&data, data.input) == -1)
 			return (-1); // gestion erreur
 		free(data.input);
+		data.input = NULL;
 		operator_check(&data);
 		data.cmd_count = 1;
 		define_token(&data);
