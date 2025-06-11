@@ -99,7 +99,8 @@ void	create_cmd_lst(t_data *data)
 
 	i = 0;
 	data->cmd = NULL;
-	while (i <= data->cmd_count)
+	printf("cmd count = %d\n", data->cmd_count);
+	while (i < data->cmd_count)
 	{
 		cmd = ft_cmdnew();
 		if (!cmd)

@@ -25,8 +25,9 @@ static void	open_heredoc(t_data *data, t_cmd *cmd, char *delim, int i_hrdc)
 	input = readline("heredoc> ");
 	str = "/tmp/heredoc";
 	hrdc_nbr = ft_itoa(i_hrdc);
-	f_name = ft_strjoin(str, ft_itoa(i_hrdc));
+	f_name = ft_strjoin(str, hrdc_nbr);
 	free(hrdc_nbr);
+	hrdc_nbr = NULL;
 	if (!f_name)
 		return ; // erreur malloc
 	fd = open(f_name, O_CREAT | O_WRONLY | O_TRUNC, 0600);

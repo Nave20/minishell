@@ -23,5 +23,6 @@ void	operator_check(t_data *data)
 			if (!data->token[i + 1].tab || is_operator(data->token[i + 1].tab))
 				return ; // bash: syntax error near unexpected token `newline'
 		}
+		i++;
 	}
 }
