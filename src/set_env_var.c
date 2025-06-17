@@ -13,7 +13,7 @@ static void	cpy_env_var(int *i, char *env_var, char *update)
 	}
 }
 
-static void	update_tab(char **str, int start, int end, char *env_var)
+static int	update_var(char **str, int start, int end, char *env_var)
 {
 	char	*update;
 	int		len;
@@ -24,6 +24,8 @@ static void	update_tab(char **str, int start, int end, char *env_var)
 	j = 0;
 	len = ft_strlen(*str) - (end - start) + ft_strlen(env_var);
 	update = malloc((len + 1) * sizeof(char));
+	if (!update)
+		return (-1);
 	while ((*str)[j])
 	{
 		if (j == start)
@@ -37,6 +39,41 @@ static void	update_tab(char **str, int start, int end, char *env_var)
 	update[i] = '\0';
 	free(*str);
 	*str = update;
+	return (0);
+}
+
+static int	update_null_var(char **str, int start, int end)
+{
+	char	*update;
+	int		len;
+	int		i;
+	int		j;
+
+	if (ft_strlen(*str) - (end - start) == 0)
+	{
+		free(*str);
+		*str = ft_calloc(1, sizeof(char));
+		return (0);
+	}
+	len = ft_strlen(*str) - (end - start);
+	update = malloc((len + 2) * sizeof(char));
+	i = 0;
+	j = 0;
+	if (!update)
+		return (-1);
+	while ((*str)[i])
+	{
+		if (i == start)
+			i = end;
+		update[j] = (*str)[i];
+		if ((*str)[i])
+			i++;
+		j++;
+	}
+	update[j] = '\0';
+	free(*str);
+	*str = update;
+	return (0);
 }
 
 static void	rep_env_var(t_data *data, int i, int start, int end)
@@ -47,6 +84,8 @@ static void	rep_env_var(t_data *data, int i, int start, int end)
 
 	j = 0;
 	var = malloc((end - start + 1) * sizeof(char));
+	if (!var)
+		exit_failure(data, "minishell : memory allocation failed\n");
 	while (start < end)
 	{
 		var[j] = data->token[i].tab[start];
@@ -57,7 +96,15 @@ static void	rep_env_var(t_data *data, int i, int start, int end)
 	start = end - j - 1;
 	env_var = getenv(var);
 	if (env_var)
-		update_tab(&data->token[i].tab, start, end, env_var);
+	{
+		if (update_var(&data->token[i].tab, start, end, env_var) == -1)
+			exit_failure(data, "minishell : memory allocation failed\n");
+	}
+	else
+	{
+		if (update_null_var(&data->token[i].tab, start, end) == -1)
+			exit_failure(data, "minishell : memory allocation failed\n");
+	}
 	free(var);
 }
 
@@ -78,6 +125,8 @@ static void	get_env_var(t_data *data, int i)
 				|| data->token[i].tab[end] == '_')
 				end++;
 			rep_env_var(data, i, start + 1, end);
+			if (data->token[i].tab[0] == '\0')
+				return ;
 		}
 		start++;
 	}
@@ -92,7 +141,8 @@ void	set_env_var(t_data *data)
 	j = 0;
 	while (data->token[i].tab)
 	{
-		while (data->token[i].tab[j] && data->token[i].tab[0] != '\'')
+		while (data->token[i].tab[0] && data->token[i].tab[j]
+			&& data->token[i].tab[0] != '\'')
 		{
 			if (data->token[i].tab[j] == '$' && data->token[i].tab[j
 				+ 1] != '\0')

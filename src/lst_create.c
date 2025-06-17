@@ -56,6 +56,18 @@ static void	set_cmd_str(t_data *data)
 	}
 }
 
+static void	create_str_tab(t_data *data, t_cmd *cmd, int str_count)
+{
+	if (str_count)
+	{
+		cmd->str = ft_calloc(str_count + 1, sizeof(char *));
+		if (!cmd->str)
+			exit_failure(data, "minishell : memory allocation failed\n");
+		str_count = 0;
+		cmd = cmd->next;
+	}
+}
+
 static void	set_str(t_data *data)
 {
 	int		i;
@@ -71,15 +83,26 @@ static void	set_str(t_data *data)
 			str_count++;
 		if (data->token[i].type == PIPE)
 		{
-			if (str_count)
-				cmd->str = ft_calloc(str_count + 1, sizeof(char *));
-			str_count = 0;
-			cmd = cmd->next;
+			create_str_tab(data, cmd, str_count);
+			// if (str_count)
+			// {
+			// 	cmd->str = ft_calloc(str_count + 1, sizeof(char *));
+			// 	if (!cmd->str)
+			// 		exit_failure(data,
+			// 			"minishell : memory allocation failed\n");
+			// 	str_count = 0;
+			// 	cmd = cmd->next;
+			// }
 		}
 		i++;
 	}
-	if (str_count)
-		cmd->str = ft_calloc(str_count + 1, sizeof(char *));
+	create_str_tab(data, cmd, str_count);
+	// if (str_count)
+	// {
+	// 	cmd->str = ft_calloc(str_count + 1, sizeof(char *));
+	// 	if (!cmd->str)
+	// 		exit_failure(data, "minishell : memory allocation failed\n");
+	// }
 }
 
 static void	set_cmd_lst(t_data *data)
@@ -102,9 +125,13 @@ void	create_cmd_lst(t_data *data)
 	printf("cmd count = %d\n", data->cmd_count);
 	while (i < data->cmd_count)
 	{
-		cmd = ft_cmdnew();
+		cmd = ft_cmdnew(data);
 		if (!cmd)
+		{
+			free_data(data);
+			data->err_code = 1;
 			exit(EXIT_FAILURE); // gestion erreur
+		}
 		ft_cmdadd_back(&data->cmd, cmd);
 		i++;
 	}

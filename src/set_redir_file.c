@@ -9,9 +9,10 @@ static int	set_append_file(t_data *data, t_cmd *cmd, int *i)
 		if (cmd->outfile)
 			close(cmd->outfile);
 		fd = open(data->token[++(*i)].tab, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (fd == -1)
-			return (-1); // gestion erreur
 		cmd->outfile = fd;
+		cmd->outfile_name = data->token[*i].tab;
+		if (fd == -1)
+			return (-1);
 	}
 	else
 		return (-1);
@@ -27,9 +28,10 @@ static int	set_redir_out(t_data *data, t_cmd *cmd, int *i)
 		if (cmd->outfile)
 			close(cmd->outfile);
 		fd = open(data->token[++(*i)].tab, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd == -1)
-			return (-1); // gestion erreur
 		cmd->outfile = fd;
+		cmd->outfile_name = data->token[*i].tab;
+		if (fd == -1)
+			return (-1);
 	}
 	else
 		return (-1);
@@ -48,12 +50,12 @@ void	set_outfile(t_data *data)
 		if (data->token[i].type == REDIR_OUT)
 		{
 			if (set_redir_out(data, cmd, &i) == -1)
-				return ; // pas de fichier redirout, erreur
+				return ;
 		}
 		if (data->token[i].type == APPEND)
 		{
 			if (set_append_file(data, cmd, &i) == -1)
-				return ; // pas de fihicer append, erreur
+				return ;
 		}
 		if (data->token[i].type == PIPE)
 			cmd = cmd->next;
@@ -70,10 +72,11 @@ static int	set_redir_in(t_data *data, t_cmd *cmd, int *i, int hrdc)
 		if (cmd->infile)
 			close(cmd->infile);
 		fd = open(data->token[++(*i)].tab, O_RDONLY);
-		if (fd == -1)
-			return (-1); // gestion erreur
+		cmd->infile_name = data->token[*i].tab;
 		if (hrdc == 0)
 			cmd->infile = fd;
+		if (fd == -1)
+			return (-1);
 	}
 	else
 		return (-1);
@@ -96,7 +99,7 @@ void	set_infile(t_data *data)
 		if (data->token[i].type == REDIR_IN)
 		{
 			if (set_redir_in(data, cmd, &i, is_outf_hrdc) == -1)
-				return ; // pas de fichier redirin, erreur
+				return ;
 		}
 		if (data->token[i].type == PIPE)
 			cmd = cmd->next;

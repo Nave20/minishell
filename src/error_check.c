@@ -1,5 +1,12 @@
 #include "../header/minishell.h"
 
+void	exit_failure(t_data *data, char *str)
+{
+	ft_putstr_fd(str, 2);
+	free_data(data);
+	exit(EXIT_FAILURE);
+}
+
 void	operator_check(t_data *data)
 {
 	int	i;

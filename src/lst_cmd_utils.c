@@ -32,13 +32,15 @@ void	ft_cmdadd_back(t_cmd **lst, t_cmd *new)
 	}
 }
 
-t_cmd	*ft_cmdnew(void)
+t_cmd	*ft_cmdnew(t_data *data)
 {
 	t_cmd	*new;
 
 	new = ft_calloc(1, sizeof(t_cmd));
 	if (!new)
-		return (NULL);
+		exit_failure(data, "minishell : memory allocation failed\n");
+	new->infile = -2;
+	new->outfile = -2;
 	new->next = NULL;
 	return (new);
 }

@@ -8,10 +8,7 @@ char	*put_token(t_data *data, int start, int end)
 	i = 0;
 	token = ft_calloc(end - start + 2, sizeof(char));
 	if (!token)
-	{
-		free_data(data);
-		exit(EXIT_FAILURE);
-	}
+		exit_failure(data, "minishell : memory allocation failed\n");
 	while (start <= end)
 	{
 		token[i] = data->input[start];
@@ -47,9 +44,13 @@ int	main(void)
 		nbword = word_count(data.input);
 		data.token = ft_calloc(nbword + 1, sizeof(t_token));
 		if (!data.token)
-			return (-1);
+			exit_failure(&data, "minishell : memory allocation failed\n");
 		if (tokenize_input(&data, data.input) == -1)
-			return (-1); // gestion erreur
+		{
+			ft_putstr_fd("minishell : unclosed quotes\n", 2);
+			data.err_code = 2;
+			return (2); // gestion erreur
+		}
 		free(data.input);
 		data.input = NULL;
 		operator_check(&data);

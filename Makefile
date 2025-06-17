@@ -20,7 +20,7 @@ HEADER          = $(INC_DIR)minishell.h
 NAME            = minishell
 
 CC              = cc
-FLAGS           = -Wall -Wextra -Werror -I$(INC_DIR)
+FLAGS           = -g3 -Wall -Wextra -Werror -I$(INC_DIR)
 
 all: $(NAME)
 

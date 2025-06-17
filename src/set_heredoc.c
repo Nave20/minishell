@@ -2,7 +2,7 @@
 
 static void	update_heredoc(t_cmd *cmd, int fd)
 {
-	if (cmd->infile != 0)
+	if (cmd->infile != -2)
 	{
 		close(fd);
 		fd = 0;
@@ -12,7 +12,7 @@ static void	update_heredoc(t_cmd *cmd, int fd)
 	}
 }
 
-static void	open_heredoc(t_data *data, t_cmd *cmd, char *delim, int i_hrdc)
+static int	open_heredoc(t_data *data, t_cmd *cmd, char *delim, int i_hrdc)
 {
 	char		*input;
 	static int	fd;
@@ -25,12 +25,17 @@ static void	open_heredoc(t_data *data, t_cmd *cmd, char *delim, int i_hrdc)
 	input = readline("heredoc> ");
 	str = "/tmp/heredoc";
 	hrdc_nbr = ft_itoa(i_hrdc);
+	if (!hrdc_nbr)
+		exit_failure(data, "minishell : memory allocation failed\n");
 	f_name = ft_strjoin(str, hrdc_nbr);
 	free(hrdc_nbr);
 	hrdc_nbr = NULL;
 	if (!f_name)
-		return ; // erreur malloc
+		exit_failure(data, "minishell : memory allocation failed\n");
 	fd = open(f_name, O_CREAT | O_WRONLY | O_TRUNC, 0600);
+	cmd->infile = fd;
+	if (fd == -1)
+		return (-1);
 	while (ft_strncmp(input, delim, ft_strlen(delim)) != 0)
 	{
 		ft_putstr_fd(input, fd);
@@ -38,8 +43,8 @@ static void	open_heredoc(t_data *data, t_cmd *cmd, char *delim, int i_hrdc)
 		input = readline("heredoc> ");
 	}
 	cmd->hrdc_path = f_name;
-	cmd->infile = fd;
 	free(input);
+	return (0);
 }
 
 void	handle_cmd_ending(t_data *data, t_cmd **cmd, int *i, int *j)
@@ -62,15 +67,19 @@ void	handle_cmd_ending(t_data *data, t_cmd **cmd, int *i, int *j)
 	}
 }
 
-void	handle_heredoc(t_data *data, t_cmd *cmd, int i)
+static int	handle_heredoc(t_data *data, t_cmd *cmd, int i)
 {
 	static int	i_hrdc;
 
 	if (data->token[i + 1].type == DELIM)
-		open_heredoc(data, cmd, data->token[i + 1].tab, i_hrdc);
+	{
+		if (open_heredoc(data, cmd, data->token[i + 1].tab, i_hrdc) == -1)
+			return (-1);
+	}
 	else
-		return ; // pas de delim, erreur
+		return (-1); // pas de delim, erreur
 	i_hrdc++;
+	return (0);
 }
 
 void	set_heredoc(t_data *data)
@@ -85,7 +94,10 @@ void	set_heredoc(t_data *data)
 	while (data->token[i].tab)
 	{
 		if (data->token[i].type == HEREDOC)
-			handle_heredoc(data, cmd, i);
+		{
+			if (handle_heredoc(data, cmd, i) == -1)
+				return ;
+		}
 		if (data->token[i].type == PIPE || !data->token[i].tab)
 			handle_cmd_ending(data, &cmd, &i, &j);
 		i++;

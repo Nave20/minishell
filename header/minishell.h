@@ -6,7 +6,7 @@
 /*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/06/10 12:39:42 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/06/12 15:07:59 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ typedef enum e_type
 	CMD,
 	CMD_BI,
 	STR,
-	ENV_V,
 	INFILE,
 	OUTFILE,
 	DELIM,
@@ -62,6 +61,7 @@ struct					s_data
 {
 	char				*input;
 	int					cmd_count;
+	int					err_code;
 	t_token				*token;
 	t_cmd				*cmd;
 };
@@ -77,6 +77,8 @@ struct					s_cmd
 	char				*cmd_bi;
 	char				**str;
 	char				*hrdc_path;
+	char				*infile_name;
+	char				*outfile_name;
 	int					infile;
 	int					outfile;
 	t_cmd				*next;
@@ -106,7 +108,7 @@ void					free_cmd_content(t_cmd *cmd);
 void					free_double_tab(char **str);
 void					set_env_var(t_data *data);
 void					create_cmd_lst(t_data *data);
-t_cmd					*ft_cmdnew(void);
+t_cmd					*ft_cmdnew(t_data *data);
 void					ft_cmdadd_back(t_cmd **lst, t_cmd *new);
 t_cmd					*ft_cmdlast(t_cmd *lst);
 void					set_infile(t_data *data);
@@ -115,5 +117,6 @@ void					set_infile(t_data *data);
 void					set_outfile(t_data *data);
 void					set_heredoc(t_data *data);
 bool					is_last_inf_hrdc(t_data *data, int start, int end);
+void					exit_failure(t_data *data, char *str);
 
 #endif
