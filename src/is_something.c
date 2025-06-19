@@ -36,18 +36,30 @@ bool	is_build_in(char *cmd)
 		return (false);
 }
 
-bool	is_locked(char *tab, int c)
+bool	is_locked(char *tab)
 {
 	int	i;
 
 	i = 1;
 	while (tab[i])
 	{
-		if (tab[i] == c)
-			return (true);
+		if (tab[i] == '\'')
+		{
+			while (tab[i] && tab[i] != '\'')
+				i++;
+			if (tab[i] == '\0')
+				return (false);
+		}
+		if (tab[i] == '"')
+		{
+			while (tab[i] && tab[i] != '"')
+				i++;
+			if (tab[i] == '\0')
+				return (false);
+		}
 		i++;
 	}
-	return (false);
+	return (true);
 }
 
 bool	is_last_inf_hrdc(t_data *data, int start, int end)

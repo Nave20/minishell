@@ -132,6 +132,66 @@ static void	get_env_var(t_data *data, int i)
 	}
 }
 
+static char	*cpy_no_quotes(char *str)
+{
+	char	*cpy;
+	int		i;
+	int		j;
+
+	j = 0;
+	i = 0;
+	cpy = malloc(ft_strlen(str) * sizeof(char));
+	if (!cpy)
+		return (NULL);
+	while (str[i])
+	{
+		if (str[i] == '\'')
+		{
+			i++;
+			while (str[i] && str[i] != '\'')
+				cpy[j++] = str[i++];
+			if (str[i] == '\'')
+				i++;
+		}
+		else if (str[i] == '"')
+		{
+			i++;
+			while (str[i] && str[i] != '"')
+				cpy[j++] = str[i++];
+			if (str[i] == '"')
+				i++;
+		}
+		else
+			cpy[j++] = str[i++];
+	}
+	cpy[j] = '\0';
+	free(str);
+	return (cpy);
+}
+
+static void	remove_quotes(t_data *data)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (data->token[i].tab)
+	{
+		while (data->token[i].tab[j] && data->token[i].tab[j] != '\''
+			&& data->token[i].tab[j] != '"')
+			j++;
+		if (data->token[i].tab[j] == '\'' || data->token[i].tab[j] == '"')
+		{
+			data->token[i].tab = cpy_no_quotes(data->token[i].tab);
+			if (!data->token[i].tab)
+				exit_failure(data, "minishell : memory allocation failed\n");
+		}
+		i++;
+		j = 0;
+	}
+}
+
 void	set_env_var(t_data *data)
 {
 	int	i;
@@ -142,8 +202,14 @@ void	set_env_var(t_data *data)
 	while (data->token[i].tab)
 	{
 		while (data->token[i].tab[0] && data->token[i].tab[j]
-			&& data->token[i].tab[0] != '\'')
+			&& data->token[i].type != DELIM)
 		{
+			if (data->token[i].tab[j] == '\'')
+			{
+				j++;
+				while (data->token[i].tab[j] != '\'')
+					j++;
+			}
 			if (data->token[i].tab[j] == '$' && data->token[i].tab[j
 				+ 1] != '\0')
 				get_env_var(data, i);
@@ -152,4 +218,5 @@ void	set_env_var(t_data *data)
 		j = 0;
 		i++;
 	}
+	remove_quotes(data);
 }
