@@ -201,21 +201,23 @@ void	set_env_var(t_data *data)
 	j = 0;
 	while (data->token[i].tab)
 	{
-		while (data->token[i].tab[0] && data->token[i].tab[j]
+		j = 0;
+		while (data->token[i].tab[j] && data->token[i].tab[0]
 			&& data->token[i].type != DELIM)
 		{
 			if (data->token[i].tab[j] == '\'')
 			{
 				j++;
-				while (data->token[i].tab[j] != '\'')
+				while (data->token[i].tab[j] && data->token[i].tab[j] != '\'')
 					j++;
 			}
 			if (data->token[i].tab[j] == '$' && data->token[i].tab[j
-				+ 1] != '\0')
+				+ 1] != '\0' && data->token[i].tab[j + 1] != '"'
+				&& data->token[i].tab[j + 1] != ' ' && data->token[i].tab[j
+				+ 1] != '\'')
 				get_env_var(data, i);
 			j++;
 		}
-		j = 0;
 		i++;
 	}
 	remove_quotes(data);

@@ -106,7 +106,6 @@ static void	handle_normal(t_data *data, int *nbword, int *i)
 	{
 		(*i)++;
 		if (data->input[*i] == ' ' || data->input[*i] == '\0'
-			|| data->input[*i] == '\'' || data->input[*i] == '"'
 			|| data->input[*i] == '<' || data->input[*i] == '>'
 			|| data->input[*i] == '|')
 		{

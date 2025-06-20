@@ -6,7 +6,7 @@
 /*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/06/19 15:00:26 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/06/20 14:53:23 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,5 +112,6 @@ void					set_outfile(t_data *data);
 void					set_heredoc(t_data *data);
 bool					is_last_inf_hrdc(t_data *data, int start, int end);
 void					exit_failure(t_data *data, char *str);
+void					print_token(t_data *data);
 
 #endif
