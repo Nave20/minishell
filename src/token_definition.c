@@ -1,5 +1,32 @@
 #include "../header/minishell.h"
 
+void	define_operator(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (data->token[i].tab)
+	{
+		if (data->token[i].tab[0] == '|')
+			data->token[i].type = PIPE;
+		if (data->token[i].tab[0] == '<')
+		{
+			if (data->token[i].tab[1] == '<')
+				data->token[i].type = HEREDOC;
+			else
+				data->token[i].type = REDIR_IN;
+		}
+		if (data->token[i].tab[0] == '>')
+		{
+			if (data->token[i].tab[1] == '>')
+				data->token[i].type = APPEND;
+			else
+				data->token[i].type = REDIR_OUT;
+		}
+		i++;
+	}
+}
+
 static void	define_build_in(t_data *data)
 {
 	int	i;
@@ -26,7 +53,7 @@ static void	define_str(t_data *data)
 	}
 }
 
-void	define_token(t_data *data)
+void	define_token(t_data *data, int k)
 {
 	int	i;
 	int	j;
@@ -50,6 +77,10 @@ void	define_token(t_data *data)
 	}
 	define_str(data);
 	define_build_in(data);
-	print_token(data);
-	set_env_var(data);
+	if (k == 0)
+	{
+		set_env_var(data);
+		last_split(data);
+		remove_quotes(data);
+	}
 }

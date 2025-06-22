@@ -1,32 +1,5 @@
 #include "../header/minishell.h"
 
-static void	print_lst(t_data *data)
-{
-	t_cmd	*cmd;
-	int		i;
-
-	i = 0;
-	cmd = data->cmd;
-	while (data->cmd != NULL)
-	{
-		printf("cmd = %s\ncmd_bi = %s\nhrdc_path = %s\n", cmd->cmd, cmd->cmd_bi,
-			cmd->hrdc_path);
-		printf("infile fd = %d\noutfile fd = %d\n", cmd->infile, cmd->outfile);
-		if (cmd->str)
-		{
-			while (cmd->str[i])
-			{
-				printf("str = %s\n", cmd->str[i]);
-				i++;
-			}
-		}
-		i = 0;
-		if (!cmd->next)
-			return ;
-		cmd = cmd->next;
-	}
-}
-
 static void	set_cmd_str(t_data *data)
 {
 	int		i;

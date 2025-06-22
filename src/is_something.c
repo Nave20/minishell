@@ -80,3 +80,11 @@ bool	is_last_inf_hrdc(t_data *data, int start, int end)
 	else
 		return (0);
 }
+
+bool	ft_isspace(char c)
+{
+	if (c >= 9 && c <= 13)
+		return (true);
+	else
+		return (false);
+}

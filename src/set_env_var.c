@@ -165,11 +165,12 @@ static char	*cpy_no_quotes(char *str)
 			cpy[j++] = str[i++];
 	}
 	cpy[j] = '\0';
+	printf("cpynoquotes = %s\n", cpy);
 	free(str);
 	return (cpy);
 }
 
-static void	remove_quotes(t_data *data)
+void	remove_quotes(t_data *data)
 {
 	int	i;
 	int	j;
@@ -220,5 +221,4 @@ void	set_env_var(t_data *data)
 		}
 		i++;
 	}
-	remove_quotes(data);
 }
