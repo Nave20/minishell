@@ -1,50 +1,91 @@
 #include "../header/minishell.h"
 
-void	set_cmd_lst(t_data *data)
+static void	set_cmd_str(t_data *data)
 {
 	int		i;
+	int		j;
 	t_cmd	*cmd;
 
 	i = 0;
+	j = 0;
 	cmd = data->cmd;
-	set_infile(data);
-	set_outfile(data);
-	set_heredoc(data);
-	while (data->token[i].tab && data->token[i].type != PIPE)
+	while (data->token[i].tab)
 	{
 		if (data->token[i].type == CMD)
 			cmd->cmd = data->token[i].tab;
 		if (data->token[i].type == CMD_BI)
 			cmd->cmd_bi = data->token[i].tab;
-		if (data->token[i].type == ARG)
-			cmd->arg = data->token[i].tab;
-		if (data->token[i].type == FLAG)
-			cmd->flag = data->token[i].tab;
-		// if (data->token[i].type == INFILE)
-		// 	find_infile(data);
-		// if (data->token[i].type == OUTFILE)
-		// 	find_outfile(data);
-		// if (data->token[i].type == DELIM)
-		// 	cmd->delim = data->token[i].tab;
-		i++;
+		if (data->token[i].type == STR)
+		{
+			cmd->str[j] = data->token[i].tab;
+			j++;
+		}
 		if (data->token[i].type == PIPE)
 		{
-			i++;
-			cmd = data->cmd->next;
+			j = 0;
+			cmd = cmd->next;
 		}
+		i++;
 	}
 }
 
-void	set_lst_null(t_cmd *cmd)
+static void	create_str_tab(t_data *data, t_cmd *cmd, int str_count)
 {
-	cmd->cmd = NULL;
-	cmd->cmd_bi = NULL;
-	cmd->arg = NULL;
-	cmd->flag = NULL;
-	cmd->infile = NULL;
-	cmd->outfile = NULL;
-	cmd->delim = NULL;
-	cmd->next = NULL;
+	if (str_count)
+	{
+		cmd->str = ft_calloc(str_count + 1, sizeof(char *));
+		if (!cmd->str)
+			exit_failure(data, "minishell : memory allocation failed\n");
+		str_count = 0;
+		cmd = cmd->next;
+	}
+}
+
+static void	set_str(t_data *data)
+{
+	int		i;
+	int		str_count;
+	t_cmd	*cmd;
+
+	i = 0;
+	cmd = data->cmd;
+	str_count = 0;
+	while (data->token[i].tab)
+	{
+		if (data->token[i].type == STR)
+			str_count++;
+		if (data->token[i].type == PIPE)
+		{
+			create_str_tab(data, cmd, str_count);
+			// if (str_count)
+			// {
+			// 	cmd->str = ft_calloc(str_count + 1, sizeof(char *));
+			// 	if (!cmd->str)
+			// 		exit_failure(data,
+			// 			"minishell : memory allocation failed\n");
+			// 	str_count = 0;
+			// 	cmd = cmd->next;
+			// }
+		}
+		i++;
+	}
+	create_str_tab(data, cmd, str_count);
+	// if (str_count)
+	// {
+	// 	cmd->str = ft_calloc(str_count + 1, sizeof(char *));
+	// 	if (!cmd->str)
+	// 		exit_failure(data, "minishell : memory allocation failed\n");
+	// }
+}
+
+static void	set_cmd_lst(t_data *data)
+{
+	set_heredoc(data);
+	set_infile(data);
+	set_outfile(data);
+	set_str(data);
+	set_cmd_str(data);
+	print_lst(data);
 }
 
 void	create_cmd_lst(t_data *data)
@@ -52,14 +93,20 @@ void	create_cmd_lst(t_data *data)
 	int		i;
 	t_cmd	*cmd;
 
-	i = 1;
-	while (i <= data->cmd_count)
+	i = 0;
+	data->cmd = NULL;
+	printf("cmd count = %d\n", data->cmd_count);
+	while (i < data->cmd_count)
 	{
-		cmd = malloc(sizeof(t_cmd));
+		cmd = ft_cmdnew(data);
 		if (!cmd)
+		{
+			free_data(data);
+			data->err_code = 1;
 			exit(EXIT_FAILURE); // gestion erreur
-		ft_lstadd_back(data->cmd, ft_lstnew(cmd));
-		set_lst_null(data->cmd);
+		}
+		ft_cmdadd_back(&data->cmd, cmd);
+		i++;
 	}
 	set_cmd_lst(data);
 }

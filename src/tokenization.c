@@ -1,29 +1,58 @@
 #include "../header/minishell.h"
 
-int	handle_quote(t_data *data, int *nbword, int quote, int *i)
+static int	handle_double_quote(t_data *data, int *nbword, int *i)
 {
 	int	start;
 	int	end;
 
-	if (!is_locked(data->input + (*i), quote))
+	if (!is_locked(data->input))
 		return (-1); // a completer avec erreur correspondante
 	(*i)++;
-	start = *i;
-	while (data->input[*i] != quote)
+	start = (*i) - 1;
+	while (data->input[*i])
+	{
 		(*i)++;
-	end = (*i) - 1;
-	data->token[*nbword].tab = put_token(data, start, end);
-	// copie le token entre quotes dans tab
-	if (quote == '\'')
-		data->token[*nbword].quote = S_QUOTE;
-	if (quote == '"')
-		data->token[*nbword].quote = D_QUOTE;
-	(*nbword)++;
-	(*i)++;
+		if (data->input[*i] == '"' && (data->input[(*i) + 1] == ' '
+				|| data->input[(*i) + 1] == '\0'))
+		{
+			end = (*i);
+			data->token[*nbword].tab = put_token(data, start, end);
+			// copie le token entre quotes dans tab
+			(*nbword)++;
+			(*i)++;
+			return (0);
+		}
+	}
 	return (0);
 }
 
-void	handle_redirect(t_data *data, int *nbword, int *i, int c)
+static int	handle_simple_quote(t_data *data, int *nbword, int *i)
+{
+	int	start;
+	int	end;
+
+	if (!is_locked(data->input))
+		return (-1); // a completer avec erreur correspondante
+	(*i)++;
+	start = (*i) - 1;
+	while (data->input[*i])
+	{
+		(*i)++;
+		if (data->input[*i] == '\'' && (data->input[(*i) + 1] == ' '
+			|| data->input[(*i) + 1] == '\0'))
+		{
+			end = (*i);
+			data->token[*nbword].tab = put_token(data, start, end);
+			// copie le token entre quotes dans tab
+			(*nbword)++;
+			(*i)++;
+			return (0);
+		}
+	}
+	return (0);
+}
+
+static void	handle_redirect(t_data *data, int *nbword, int *i, int c)
 {
 	if (data->input[*i + 1] == c)
 	{
@@ -39,7 +68,7 @@ void	handle_redirect(t_data *data, int *nbword, int *i, int c)
 	return ;
 }
 
-void	handle_special_c(t_data *data, int *nbword, int *i)
+static void	handle_special_c(t_data *data, int *nbword, int *i)
 {
 	if (data->input[*i] == '|')
 	{
@@ -67,7 +96,7 @@ void	handle_special_c(t_data *data, int *nbword, int *i)
 	}
 }
 
-void	handle_normal(t_data *data, int *nbword, int *i)
+static void	handle_normal(t_data *data, int *nbword, int *i)
 {
 	int	start;
 	int	end;
@@ -77,13 +106,11 @@ void	handle_normal(t_data *data, int *nbword, int *i)
 	{
 		(*i)++;
 		if (data->input[*i] == ' ' || data->input[*i] == '\0'
-			|| data->input[*i] == '\'' || data->input[*i] == '"'
 			|| data->input[*i] == '<' || data->input[*i] == '>'
 			|| data->input[*i] == '|')
 		{
 			end = (*i) - 1;
 			data->token[*nbword].tab = put_token(data, start, end);
-			data->token[*nbword].quote = N_QUOTE;
 			(*nbword)++;
 			return ;
 		}
@@ -103,12 +130,12 @@ int	tokenize_input(t_data *data, char *input)
 			i++;
 		if (input[i] == '"')
 		{
-			if (handle_quote(data, &nbword, '"', &i) == -1)
+			if (handle_double_quote(data, &nbword, &i) == -1)
 				return (-1); // faire fonction erreur
 		}
 		if (input[i] == '\'')
 		{
-			if (handle_quote(data, &nbword, '\'', &i) == -1)
+			if (handle_simple_quote(data, &nbword, &i) == -1)
 				return (-1); // VDD
 		}
 		if (input[i] == '|' || input[i] == '<' || input[i] == '>')

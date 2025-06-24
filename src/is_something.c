@@ -1,5 +1,12 @@
 #include "../header/minishell.h"
 
+bool	is_operator(char *str)
+{
+	if (str[0] == '|' || str[0] == '<' || str[0] == '>')
+		return (true);
+	return (false);
+}
+
 bool	is_simple_cmd(t_data *data, int end)
 {
 	int	i;
@@ -29,16 +36,55 @@ bool	is_build_in(char *cmd)
 		return (false);
 }
 
-bool	is_locked(char *tab, int c)
+bool	is_locked(char *tab)
 {
 	int	i;
 
 	i = 1;
 	while (tab[i])
 	{
-		if (tab[i] == c)
-			return (true);
+		if (tab[i] == '\'')
+		{
+			while (tab[i] && tab[i] != '\'')
+				i++;
+			if (tab[i] == '\0')
+				return (false);
+		}
+		if (tab[i] == '"')
+		{
+			while (tab[i] && tab[i] != '"')
+				i++;
+			if (tab[i] == '\0')
+				return (false);
+		}
 		i++;
 	}
-	return (false);
+	return (true);
+}
+
+bool	is_last_inf_hrdc(t_data *data, int start, int end)
+{
+	int	type_outf;
+
+	type_outf = 0;
+	while (start < end)
+	{
+		if (data->token[start].type == REDIR_IN)
+			type_outf = data->token[start].type;
+		if (data->token[start].type == HEREDOC)
+			type_outf = data->token[start].type;
+		start++;
+	}
+	if (type_outf == HEREDOC)
+		return (1);
+	else
+		return (0);
+}
+
+bool	ft_isspace(char c)
+{
+	if (c >= 9 && c <= 13)
+		return (true);
+	else
+		return (false);
 }
