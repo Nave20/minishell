@@ -27,7 +27,7 @@ void	terminal(t_all all)
 			break ;
 		if (*input)
 			add_history(input);
-		hub(all, input);
+		// hub(all, input);
 		printf("%s\n", input);
 		free(input);
 	}

@@ -103,17 +103,18 @@ typedef struct	s_all
 //--------------------------------MAIN---------------------------------
 
 //-------------------------------PARSING-------------------------------
-int						word_count(char *input);
-int						tokenize_input(t_data *data, char *input);
-char					*put_token(t_data *data, int start, int end);
-bool					is_locked(char *tab, int c);
-void					define_token(t_data *data);
-bool					is_locked(char *tab, int c);
-bool					is_build_in(char *cmd);
-bool					is_simple_cmd(t_data *data, int end);
-void					free_data(t_data *data);
-void					set_infile(t_data *data);
-void					set_outfile(t_data *data);
+int		word_count(char *input);
+int		tokenize_input(t_data *data, char *input);
+char	*put_token(t_data *data, int start, int end);
+bool	is_locked(char *tab, int c);
+void	define_token(t_data *data);
+bool	is_locked(char *tab, int c);
+bool	is_build_in(char *cmd);
+bool	is_simple_cmd(t_data *data, int end);
+void	free_data(t_data *data);
+void	set_infile(t_data *data);
+void	set_outfile(t_data *data);
+char	*put_token(t_data *data, int start, int end);
 
 //------------------------------TERMINAL-------------------------------
 void	terminal(t_all all);
