@@ -64,6 +64,8 @@ int	word_count(char *input)
 
 	i = 0;
 	nbword = 0;
+	if (input[0] == '\0')
+		nbword++;
 	while (input[i])
 	{
 		count_simple(input, &nbword, &i);
@@ -77,6 +79,5 @@ int	word_count(char *input)
 			i++;
 		count_quotes(input, &nbword, &i);
 	}
-	// printf("nbword = %d\n", nbword);
 	return (nbword);
 }

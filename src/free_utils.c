@@ -28,11 +28,20 @@ void	free_cmd_content(t_cmd *cmd)
 		cmd->hrdc_path = NULL;
 	}
 	if (cmd->infile > 0)
+	{
 		close(cmd->infile);
+		cmd->infile = -2;
+	}
 	if (cmd->outfile > 0)
+	{
 		close(cmd->outfile);
+		cmd->outfile = -2;
+	}
 	if (cmd->str)
+	{
 		free(cmd->str);
+		cmd->str = NULL;
+	}
 }
 
 void	free_cmd(t_data *data)
@@ -44,7 +53,6 @@ void	free_cmd(t_data *data)
 	while (cmd)
 	{
 		next = cmd->next;
-		// free(cmd->str);
 		free_cmd_content(cmd);
 		free(cmd);
 		cmd = next;
@@ -78,5 +86,6 @@ void	free_data(t_data *data)
 			free_cmd(data);
 		if (data->token)
 			free_token(data);
+		data->cmd_count = 0;
 	}
 }

@@ -1,10 +1,32 @@
 #include "../header/minishell.h"
 
+void	skip_quotes(char *str, int *i)
+{
+	if (str[*i] == '\'')
+	{
+		(*i)++;
+		while (str[*i] && str[*i] != '\'')
+			(*i)++;
+		if (str[*i] == '\'')
+			(*i)++;
+	}
+	else if (str[*i] == '"')
+	{
+		(*i)++;
+		while (str[*i] && str[*i] != '"')
+			(*i)++;
+		if (str[*i] == '"')
+			(*i)++;
+	}
+}
+
 void	print_lst(t_data *data)
 {
 	t_cmd	*cmd;
 	int		i;
+	int		len;
 
+	len = 0;
 	i = 0;
 	cmd = data->cmd;
 	while (data->cmd != NULL)
@@ -14,9 +36,14 @@ void	print_lst(t_data *data)
 		printf("infile fd = %d\noutfile fd = %d\n", cmd->infile, cmd->outfile);
 		if (cmd->str)
 		{
-			while (cmd->str[i])
+			while (cmd->str[len])
+				len++;
+			while (i < len)
 			{
-				printf("str = %s\n", cmd->str[i]);
+				if (cmd->str[i][0] == '\0')
+					printf("str = \"\"\n");
+				else
+					printf("str = %s\n", cmd->str[i]);
 				i++;
 			}
 		}
@@ -35,7 +62,7 @@ char	*put_token(t_data *data, int start, int end)
 	i = 0;
 	token = ft_calloc(end - start + 2, sizeof(char));
 	if (!token)
-		exit_failure(data, "minishell : memory allocation failed\n");
+		return (NULL);
 	while (start <= end)
 	{
 		token[i] = data->input[start];
@@ -51,10 +78,11 @@ void	print_token(t_data *data)
 	int	i;
 
 	i = 0;
+	printf("\\\\\\\tTOKEN\t\\\\\\\n");
 	while (data->token[i].tab)
 	{
-		printf("\\\\\\\tTOKEN\t\\\\\\\ntoken[%d] = %s, type = %d, quote = %d\n",
-			i, data->token[i].tab, data->token[i].type, data->token[i].quote);
+		printf("token[%d] = %s, type = %d, quote = %d\n", i, data->token[i].tab,
+			data->token[i].type, data->token[i].quote);
 		i++;
 	}
 }

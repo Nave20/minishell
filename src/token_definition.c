@@ -53,7 +53,7 @@ static void	define_str(t_data *data)
 	}
 }
 
-void	define_token(t_data *data, int k)
+int	define_token(t_data *data, int k)
 {
 	int	i;
 	int	j;
@@ -79,8 +79,11 @@ void	define_token(t_data *data, int k)
 	define_build_in(data);
 	if (k == 0)
 	{
-		set_env_var(data);
+		if (set_env_var(data) == -1)
+			return (-1);
 		last_split(data);
+		print_token(data);
 		remove_quotes(data);
 	}
+	return (0);
 }

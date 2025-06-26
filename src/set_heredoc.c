@@ -4,7 +4,8 @@ static void	update_heredoc(t_cmd *cmd, int fd)
 {
 	if (cmd->infile != -2)
 	{
-		close(fd);
+		if (fd >= 0)
+			close(fd);
 		fd = 0;
 		unlink(cmd->hrdc_path);
 		free(cmd->hrdc_path);
@@ -26,12 +27,12 @@ static int	open_heredoc(t_data *data, t_cmd *cmd, char *delim, int i_hrdc)
 	str = "/tmp/heredoc";
 	hrdc_nbr = ft_itoa(i_hrdc);
 	if (!hrdc_nbr)
-		exit_failure(data, "minishell : memory allocation failed\n");
+		err_return(data, "minishell : memory allocation failed\n");
 	f_name = ft_strjoin(str, hrdc_nbr);
 	free(hrdc_nbr);
 	hrdc_nbr = NULL;
 	if (!f_name)
-		exit_failure(data, "minishell : memory allocation failed\n");
+		err_return(data, "minishell : memory allocation failed\n");
 	fd = open(f_name, O_CREAT | O_WRONLY | O_TRUNC, 0600);
 	cmd->infile = fd;
 	if (fd == -1)
@@ -51,7 +52,8 @@ void	handle_cmd_ending(t_data *data, t_cmd **cmd, int *i, int *j)
 {
 	if (!is_last_inf_hrdc(data, *j, *i))
 	{
-		close((*cmd)->infile); // protection
+		if ((*cmd)->infile >= 0)
+			close((*cmd)->infile); // protection
 		(*cmd)->infile = 0;
 		if ((*cmd)->hrdc_path)
 		{

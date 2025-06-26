@@ -40,11 +40,12 @@ bool	is_locked(char *tab)
 {
 	int	i;
 
-	i = 1;
+	i = 0;
 	while (tab[i])
 	{
 		if (tab[i] == '\'')
 		{
+			i++;
 			while (tab[i] && tab[i] != '\'')
 				i++;
 			if (tab[i] == '\0')
@@ -52,6 +53,7 @@ bool	is_locked(char *tab)
 		}
 		if (tab[i] == '"')
 		{
+			i++;
 			while (tab[i] && tab[i] != '"')
 				i++;
 			if (tab[i] == '\0')

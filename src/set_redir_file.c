@@ -6,7 +6,7 @@ static int	set_append_file(t_data *data, t_cmd *cmd, int *i)
 
 	if (data->token[*i].tab)
 	{
-		if (cmd->outfile)
+		if (cmd->outfile >= 0)
 			close(cmd->outfile);
 		fd = open(data->token[++(*i)].tab, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		cmd->outfile = fd;
@@ -25,7 +25,7 @@ static int	set_redir_out(t_data *data, t_cmd *cmd, int *i)
 
 	if (data->token[*i].tab)
 	{
-		if (cmd->outfile)
+		if (cmd->outfile >= 0)
 			close(cmd->outfile);
 		fd = open(data->token[++(*i)].tab, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		cmd->outfile = fd;
@@ -69,7 +69,7 @@ static int	set_redir_in(t_data *data, t_cmd *cmd, int *i, int hrdc)
 
 	if (data->token[*i + 1].tab)
 	{
-		if (cmd->infile)
+		if (cmd->infile >= 0)
 			close(cmd->infile);
 		fd = open(data->token[++(*i)].tab, O_RDONLY);
 		cmd->infile_name = data->token[*i].tab;

@@ -6,7 +6,7 @@
 /*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/06/22 17:55:53 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/06/26 12:05:36 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,8 @@ int						word_count(char *input);
 int						tokenize_input(t_data *data, char *input);
 char					*put_token(t_data *data, int start, int end);
 bool					is_operator(char *str);
-void					operator_check(t_data *data);
-void					define_token(t_data *data, int k);
+int						operator_check(t_data *data);
+int						define_token(t_data *data, int k);
 void					define_operator(t_data *data);
 void					handle_simple_cmd(t_data *data, int start, int end);
 void					handle_redir_cmd(t_data *data, int start, int end);
@@ -102,9 +102,12 @@ void					free_token(t_data *data);
 void					free_cmd(t_data *data);
 void					free_cmd_content(t_cmd *cmd);
 void					free_double_tab(char **str);
-void					set_env_var(t_data *data);
+int						set_env_var(t_data *data);
+int						rep_env_var(t_data *data, int i, int start, int end);
+int						update_null_var(t_data *data, char **str, int start,
+							int end);
 void					remove_quotes(t_data *data);
-void					create_cmd_lst(t_data *data);
+int						create_cmd_lst(t_data *data);
 t_cmd					*ft_cmdnew(t_data *data);
 void					ft_cmdadd_back(t_cmd **lst, t_cmd *new);
 t_cmd					*ft_cmdlast(t_cmd *lst);
@@ -114,7 +117,8 @@ void					set_infile(t_data *data);
 void					set_outfile(t_data *data);
 void					set_heredoc(t_data *data);
 bool					is_last_inf_hrdc(t_data *data, int start, int end);
-void					exit_failure(t_data *data, char *str);
+int						err_return(t_data *data, char *str);
+int						err_return_token(t_data *data, char *str);
 int						last_split(t_data *data);
 int						handle_normal_new(char *old, char **new, int *i);
 int						handle_special_c_new(char *old, char **new, int *i);
@@ -125,7 +129,7 @@ int						handle_double_quote_new(char *old, char **new, int *i);
 int						ft_tablen(char **tab);
 int						put_token_new(char *old, char **new, int start,
 							int end);
-
+void					skip_quotes(char *data, int *i);
 void					print_lst(t_data *data);
 void					print_token(t_data *data);
 #endif
