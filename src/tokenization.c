@@ -1,6 +1,6 @@
 #include "../header/minishell.h"
 
-static int	handle_quotes(t_data *data, int *nbword, int *i)
+int	handle_quotes(t_data *data, int *nbword, int *i)
 {
 	int	start;
 	int	end;
@@ -24,7 +24,7 @@ static int	handle_quotes(t_data *data, int *nbword, int *i)
 	return (0);
 }
 
-static int	handle_redirect(t_data *data, int *nbword, int *i, int c)
+int	handle_redirect(t_data *data, int *nbword, int *i, int c)
 {
 	if (data->input[*i + 1] == c)
 	{
@@ -46,7 +46,7 @@ static int	handle_redirect(t_data *data, int *nbword, int *i, int c)
 	return (0);
 }
 
-static int	handle_chevron(t_data *data, int *nbword, int *i)
+int	handle_chevron(t_data *data, int *nbword, int *i)
 {
 	if (data->input[*i] == '<')
 	{
@@ -69,7 +69,7 @@ static int	handle_chevron(t_data *data, int *nbword, int *i)
 	return (0);
 }
 
-static int	handle_special_c(t_data *data, int *nbword, int *i)
+int	handle_special_c(t_data *data, int *nbword, int *i)
 {
 	if (data->input[*i] == '|')
 	{
@@ -90,7 +90,7 @@ static int	handle_special_c(t_data *data, int *nbword, int *i)
 	return (0);
 }
 
-static int	handle_normal(t_data *data, int *nbword, int *i)
+int	handle_normal(t_data *data, int *nbword, int *i)
 {
 	int	start;
 	int	end;
@@ -112,30 +112,6 @@ static int	handle_normal(t_data *data, int *nbword, int *i)
 			(*nbword)++;
 			return (0);
 		}
-	}
-	return (0);
-}
-
-int	tokenize_input(t_data *data, char *input)
-{
-	int	i;
-	int	nbword;
-
-	i = 0;
-	nbword = 0;
-	while (input[i])
-	{
-		if (input[i] == ' ')
-			i++;
-		if (input[i] == '"' || input[i] == '\'')
-			if (handle_quotes(data, &nbword, &i) == -1)
-				return (-1);
-		if (input[i] == '|' || input[i] == '<' || input[i] == '>')
-			if (handle_special_c(data, &nbword, &i) == -1)
-				return (-1);
-		if (input[i] != ' ' && input[i] != '\'' && input[i] != '"')
-			if (handle_normal(data, &nbword, &i) == -1)
-				return (-1);
 	}
 	return (0);
 }

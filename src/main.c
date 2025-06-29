@@ -8,14 +8,34 @@ static void	cmd_count(t_data *data)
 	while (data->token[i].tab)
 	{
 		if (data->token[i].tab[0] == '|')
-		{
-			printf("cmd++ for '|'\n");
 			data->cmd_count++;
-		}
 		i++;
 	}
 	data->cmd_count++;
-	printf("i = %d, cmd count = %d\n", i, data->cmd_count);
+}
+
+int	tokenize_input(t_data *data, char *input)
+{
+	int	i;
+	int	nbword;
+
+	i = 0;
+	nbword = 0;
+	while (input[i])
+	{
+		if (input[i] == ' ')
+			i++;
+		if (input[i] == '"' || input[i] == '\'')
+			if (handle_quotes(data, &nbword, &i) == -1)
+				return (-1);
+		if (input[i] == '|' || input[i] == '<' || input[i] == '>')
+			if (handle_special_c(data, &nbword, &i) == -1)
+				return (-1);
+		if (input[i] != ' ' && input[i] != '\'' && input[i] != '"')
+			if (handle_normal(data, &nbword, &i) == -1)
+				return (-1);
+	}
+	return (0);
 }
 
 static int	parsing_hub(t_data *data)

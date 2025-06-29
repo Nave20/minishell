@@ -44,7 +44,7 @@ static int	set_redir_out(t_data *data, t_cmd *cmd, int *i)
 	return (0);
 }
 
-static int	handle_return(int ret, t_data *data, int *i)
+int	handle_return(int ret, t_data *data, int *i)
 {
 	if (ret == -1)
 		return (-1);

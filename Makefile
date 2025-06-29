@@ -7,7 +7,8 @@ LIB             = libft/libft.a
 BUILTINS_DIR    = $(SRC_DIR)builtins/
 BUILTINS_OBJDIR = $(OBJ_DIR)builtins/
 
-SRC_FILES       = main.c word_count.c tokenization.c token_definition.c is_something.c lst_create.c set_heredoc.c set_redir_infile.c set_redir_outfile.c handle_cmd_type.c lst_cmd_utils.c find_env_var.c error_check.c free_utils.c last_split.c utils.c new_token_utils.c remove_quotes.c get_env_var.c token _utils.c
+SRC_FILES       = main.c word_count.c tokenization.c token_definition.c is_something.c lst_create.c set_heredoc.c set_redir_infile.c set_redir_outfile.c handle_cmd_type.c lst_cmd_utils.c find_env_var.c error_check.c free_utils.c last_split.c utils.c new_token_utils.c remove_quotes.c get_env_var.c token_utils.c
+
 BUILTINS_FILES  =
 
 SOURCES         = $(addprefix $(SRC_DIR), $(SRC_FILES)) \

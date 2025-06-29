@@ -6,7 +6,7 @@
 /*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/06/29 14:46:22 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/06/29 15:56:07 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ typedef enum e_type
 }						t_type;
 typedef enum e_err
 {
-	NO,
+	NO_ERR,
 	INF_ERR,
 	OUTF_ERR,
 	HRDC_ERR
@@ -92,6 +92,12 @@ struct					s_cmd
 //-------------------------------PARSING-------------------------------
 int						word_count(char *input);
 int						tokenize_input(t_data *data, char *input);
+int						handle_normal(t_data *data, int *nbword, int *i);
+int						handle_special_c(t_data *data, int *nbword, int *i);
+int						handle_chevron(t_data *data, int *nbword, int *i);
+int						handle_redirect(t_data *data, int *nbword, int *i,
+							int c);
+int						handle_quotes(t_data *data, int *nbword, int *i);
 char					*put_token(t_data *data, int start, int end);
 bool					is_operator(char *str);
 int						operator_check(t_data *data);
@@ -121,6 +127,7 @@ void					ft_cmdadd_back(t_cmd **lst, t_cmd *new);
 t_cmd					*ft_cmdlast(t_cmd *lst);
 int						set_infile(t_data *data);
 int						set_outfile(t_data *data);
+int						handle_return(int ret, t_data *data, int *i);
 int						set_heredoc(t_data *data);
 void					update_heredoc(t_cmd *cmd);
 bool					is_last_inf_hrdc(t_data *data, int start, int end);
