@@ -34,7 +34,8 @@ static int	dbl_quotes_env_var(t_data *data, int i, int *j)
 		if (data->token[i].tab[*j] == '$' && (ft_isalnum(data->token[i].tab[*j
 					+ 1]) || data->token[i].tab[*j + 1] == '_'))
 		{
-			get_env_var(data, i);
+			if (get_env_var(data, i) == -1)
+				return (-1);
 			*j = 0;
 		}
 		else
@@ -51,7 +52,7 @@ static int	other_dol_cases(t_data *data, int i, int *j)
 	{
 		if (update_null_var(data, &data->token[i].tab, *j, *j + 2) == -1)
 			return (err_return_token(data,
-					"mnishell: memory allocation failed\n"));
+					"mnishell: memory allocation failed\n", 1));
 		*j = 0;
 	}
 	else if (data->token[i].tab[*j + 1] == ' ' || data->token[i].tab[*j
@@ -61,54 +62,36 @@ static int	other_dol_cases(t_data *data, int i, int *j)
 	{
 		if (update_null_var(data, &data->token[i].tab, *j, *j + 1) == -1)
 			return (err_return_token(data,
-					"mnishell: memory allocation failed\n"));
+					"mnishell: memory allocation failed\n", 1));
 		*j = 0;
 	}
+	return (0);
 }
 
 static int	search_env_var(t_data *data, int *i, int *j)
 {
-	while (data->token[*i].tab[0] && data->token[*i].tab[*j]
-		&& data->token[*i].type != DELIM)
+	if (data->token[*i].tab[*j] == '\'')
+		skip_quotes(data->token[*i].tab, j);
+	else if (data->token[*i].tab[*j] == '"')
 	{
-		if (data->token[*i].tab[*j] == '\'')
-			skip_quotes(data->token[*i].tab, j);
-		else if (data->token[*i].tab[*j] == '"')
-			dbl_quotes_env_var(data, *i, j);
-		else if (data->token[*i].tab[*j] == '$'
-			&& (ft_isalnum(data->token[*i].tab[*j + 1])
-				|| data->token[*i].tab[*j + 1] == '_'))
-		{
-			get_env_var(data, *i);
-			*j = 0;
-		}
-		else if (data->token[*i].tab[*j] == '$')
-		{
-			if (other_dol_cases(data, *i, j) == 1)
-				return (-1);
-			// if (data->token[*i].tab[*j + 1] == '$')
-			// {
-			// 	if (update_null_var(data, &data->token[*i].tab, *j, *j + 2) ==
-			// 		-1)
-			// 		return (err_return_token(data,
-			// 				"mnishell: memory allocation failed\n"));
-			// 	*j = 0;
-			// }
-			// else if (data->token[*i].tab[*j + 1] == ' '
-			// 	|| data->token[*i].tab[*j + 1] == '\0')
-			// 	(*j)++;
-			// else
-			// {
-			// 	if (update_null_var(data, &data->token[*i].tab, *j, *j + 1) ==
-			// 		-1)
-			// 		return (err_return_token(data,
-			// 				"mnishell: memory allocation failed\n"));
-			// 	*j = 0;
-			// }
-		}
-		else
-			(*j)++;
+		if (dbl_quotes_env_var(data, *i, j) == -1)
+			return (-1);
 	}
+	else if (data->token[*i].tab[*j] == '$'
+		&& (ft_isalnum(data->token[*i].tab[*j + 1]) || data->token[*i].tab[*j
+			+ 1] == '_'))
+	{
+		if (get_env_var(data, *i) == -1)
+			return (-1);
+		*j = 0;
+	}
+	else if (data->token[*i].tab[*j] == '$')
+	{
+		if (other_dol_cases(data, *i, j) == 1)
+			return (-1);
+	}
+	else
+		(*j)++;
 	return (0);
 }
 
@@ -122,8 +105,12 @@ int	set_env_var(t_data *data)
 	while (data->token[i].tab)
 	{
 		j = 0;
-		if (search_env_var(data, &i, &j) == -1)
-			return (-1);
+		while (data->token[i].tab[0] && data->token[i].tab[j]
+			&& data->token[i].type != DELIM)
+		{
+			if (search_env_var(data, &i, &j) == -1)
+				return (-1);
+		}
 		i++;
 	}
 	return (0);

@@ -6,25 +6,21 @@ static int	handle_quotes(t_data *data, int *nbword, int *i)
 	int	end;
 
 	if (!is_locked(data->input))
-		return (err_return_token(data, "minishell : unclosed quotes\n"));
+		return (err_return_token(data, "minishell : unclosed quotes\n", 2));
 	start = (*i);
-	while (data->input[*i])
+	while (data->input[*i] && data->input[*i] != ' ')
 	{
-		while (data->input[*i] == '\'' || data->input[*i] == '"')
+		if (data->input[*i] == '\'' || data->input[*i] == '"')
 			skip_quotes(data->input, i);
-		if (data->input[*i] == ' ' || data->input[*i] == '\0')
-		{
-			end = (*i);
-			data->token[*nbword].tab = put_token(data, start, end);
-			if (!data->token[*nbword].tab)
-				return (err_return_token(data,
-						"minishell: memory allocation failed\n"));
-			(*nbword)++;
-			return (0);
-		}
 		else
 			(*i)++;
 	}
+	end = (*i);
+	data->token[*nbword].tab = put_token(data, start, end);
+	if (!data->token[*nbword].tab)
+		return (err_return_token(data, "minishell: memory allocation failed\n",
+				1));
+	(*nbword)++;
 	return (0);
 }
 
@@ -35,7 +31,7 @@ static int	handle_redirect(t_data *data, int *nbword, int *i, int c)
 		data->token[*nbword].tab = put_token(data, *i, *i + 1);
 		if (!data->token[*nbword].tab)
 			return (err_return_token(data,
-					"minishell: memory allocation failed\n"));
+					"minishell: memory allocation failed\n", 1));
 		(*i) += 2;
 	}
 	else
@@ -43,7 +39,7 @@ static int	handle_redirect(t_data *data, int *nbword, int *i, int c)
 		data->token[*nbword].tab = put_token(data, *i, *i);
 		if (!data->token[*nbword].tab)
 			return (err_return_token(data,
-					"minishell: memory allocation failed\n"));
+					"minishell: memory allocation failed\n", 1));
 		(*i)++;
 	}
 	(*nbword)++;
@@ -80,7 +76,7 @@ static int	handle_special_c(t_data *data, int *nbword, int *i)
 		data->token[*nbword].tab = put_token(data, *i, *i);
 		if (!data->token[*nbword].tab)
 			return (err_return_token(data,
-					"minishell: memory allocation failed\n"));
+					"minishell: memory allocation failed\n", 1));
 		data->token[*nbword].type = PIPE;
 		(*nbword)++;
 		(*i)++;
@@ -112,7 +108,7 @@ static int	handle_normal(t_data *data, int *nbword, int *i)
 			data->token[*nbword].tab = put_token(data, start, end);
 			if (!data->token[*nbword].tab)
 				return (err_return_token(data,
-						"minishell: memory allocation failed\n"));
+						"minishell: memory allocation failed\n", 1));
 			(*nbword)++;
 			return (0);
 		}
@@ -132,20 +128,14 @@ int	tokenize_input(t_data *data, char *input)
 		if (input[i] == ' ')
 			i++;
 		if (input[i] == '"' || input[i] == '\'')
-		{
 			if (handle_quotes(data, &nbword, &i) == -1)
 				return (-1);
-		}
 		if (input[i] == '|' || input[i] == '<' || input[i] == '>')
-		{
 			if (handle_special_c(data, &nbword, &i) == -1)
 				return (-1);
-		}
 		if (input[i] != ' ' && input[i] != '\'' && input[i] != '"')
-		{
 			if (handle_normal(data, &nbword, &i) == -1)
 				return (-1);
-		}
 	}
 	return (0);
 }

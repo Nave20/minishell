@@ -27,19 +27,19 @@ void	free_cmd_content(t_cmd *cmd)
 		free(cmd->hrdc_path);
 		cmd->hrdc_path = NULL;
 	}
-	if (cmd->infile > 0)
+	if (cmd->infile_name)
 	{
-		close(cmd->infile);
-		cmd->infile = -2;
+		free(cmd->infile_name);
+		cmd->infile_name = NULL;
 	}
-	if (cmd->outfile > 0)
+	if (cmd->outfile_name)
 	{
-		close(cmd->outfile);
-		cmd->outfile = -2;
+		free(cmd->outfile_name);
+		cmd->outfile_name = NULL;
 	}
 	if (cmd->str)
 	{
-		free(cmd->str);
+		free_double_tab(cmd->str);
 		cmd->str = NULL;
 	}
 }
@@ -53,6 +53,16 @@ void	free_cmd(t_data *data)
 	while (cmd)
 	{
 		next = cmd->next;
+		if (cmd->cmd)
+		{
+			free(cmd->cmd);
+			cmd->cmd = NULL;
+		}
+		if (cmd->cmd_bi)
+		{
+			free(cmd->cmd_bi);
+			cmd->cmd_bi = NULL;
+		}
 		free_cmd_content(cmd);
 		free(cmd);
 		cmd = next;
@@ -68,7 +78,8 @@ void	free_token(t_data *data)
 	{
 		while (data->token[i].tab)
 		{
-			free(data->token[i].tab);
+			if (data->token[i].tab)
+				free(data->token[i].tab);
 			data->token[i].tab = NULL;
 			i++;
 		}
@@ -82,10 +93,10 @@ void	free_data(t_data *data)
 	{
 		if (data->input)
 			free(data->input);
-		if (data->cmd)
-			free_cmd(data);
 		if (data->token)
 			free_token(data);
+		if (data->cmd)
+			free_cmd(data);
 		data->cmd_count = 0;
 	}
 }

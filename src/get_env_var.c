@@ -71,13 +71,15 @@ int	update_null_var(t_data *data, char **str, int start, int end)
 		free(*str);
 		*str = ft_calloc(1, sizeof(char));
 		if (!*str)
-			err_return_token(data, "mnishell: memory allocation failed\n");
+			return (err_return_token(data,
+					"mnishell: memory allocation failed\n", 1));
 		return (0);
 	}
 	len = ft_strlen(*str) - (end - start);
 	update = malloc((len + 2) * sizeof(char));
 	if (!update)
-		return (err_return_token(data, "mnishell: memory allocation failed\n"));
+		return (err_return_token(data, "mnishell: memory allocation failed\n",
+				1));
 	fill_update(str, update, start, end);
 	free(*str);
 	*str = update;
@@ -93,26 +95,22 @@ int	rep_env_var(t_data *data, int i, int start, int end)
 	j = 0;
 	var = ft_calloc((end - start + 1), sizeof(char));
 	if (!var)
-		return (err_return(data, "minishell : memory allocation failed\n"));
+		return (err_return_token(data, "minishell : memory allocation failed\n",
+				1));
 	while (start + j < end)
 	{
 		var[j] = data->token[i].tab[start + j];
 		j++;
 	}
 	env_var = getenv(var);
+	free(var);
 	if (env_var)
 	{
 		if (update_var(&data->token[i].tab, start - 1, end, env_var) == -1)
-		{
-			free(var);
-			return (err_return(data, "minishell : memory allocation failed\n"));
-		}
+			return (err_return_token(data,
+					"minishell : memory allocation failed\n", 1));
 	}
-	else
-	{
-		if (update_null_var(data, &data->token[i].tab, start - 1, end) == -1)
-			return (err_return(data, "minishell : memory allocation failed\n"));
-	}
-	free(var);
+	else if (update_null_var(data, &data->token[i].tab, start - 1, end) == -1)
+		return (-1);
 	return (0);
 }

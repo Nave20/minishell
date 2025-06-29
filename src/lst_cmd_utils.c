@@ -38,7 +38,7 @@ t_cmd	*ft_cmdnew(t_data *data)
 
 	new = ft_calloc(1, sizeof(t_cmd));
 	if (!new)
-		err_return(data, "minishell : memory allocation failed\n");
+		err_return(data, "minishell : memory allocation failed\n", 1);
 	new->infile = -2;
 	new->outfile = -2;
 	new->next = NULL;

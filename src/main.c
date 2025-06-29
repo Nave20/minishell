@@ -1,5 +1,43 @@
 #include "../header/minishell.h"
 
+static void	cmd_count(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (data->token[i].tab)
+	{
+		if (data->token[i].tab[0] == '|')
+		{
+			printf("cmd++ for '|'\n");
+			data->cmd_count++;
+		}
+		i++;
+	}
+	data->cmd_count++;
+	printf("i = %d, cmd count = %d\n", i, data->cmd_count);
+}
+
+static int	parsing_hub(t_data *data)
+{
+	if (tokenize_input(data, data->input) == -1)
+		return (-1);
+	print_token(data);
+	free(data->input);
+	data->input = NULL;
+	data->cmd_count = 0;
+	if (operator_check(data) == -1)
+		return (-1);
+	if (define_token(data, 0) == -1)
+		return (-1);
+	// print_token(data);
+	cmd_count(data);
+	if (create_cmd_lst(data) == -1)
+		return (-1);
+	free_data(data);
+	return (0);
+}
+
 static int	main_hub(t_data *data)
 {
 	int	nbword;
@@ -9,25 +47,13 @@ static int	main_hub(t_data *data)
 	{
 		add_history(data->input);
 		nbword = word_count(data->input);
+		printf("nbword = %d\n", nbword);
 		data->token = ft_calloc(nbword + 1, sizeof(t_token));
 		if (!data->token)
 			return (err_return_token(data,
-					"minishell : memory allocation failed\n"));
-		if (tokenize_input(data, data->input) == -1)
-		{
-			data->err_code = 2;
-			return (2); // gestion erreur
-		}
-		print_token(data);
-		free(data->input);
-		data->input = NULL;
-		if (operator_check(data) == -1)
-			return (2);
-		data->cmd_count = 1;
-		define_token(data, 0);
-		// print_token(data);
-		create_cmd_lst(data);
-		free_data(data);
+					"minishell : memory allocation failed\n", 1));
+		if (parsing_hub(data) == -1)
+			return (-1);
 	}
 	else
 		return (1);
@@ -42,31 +68,6 @@ int	main(void)
 	{
 		if (main_hub(&data) == 1)
 			return (1);
-		// data.input = readline("minishell> ");
-		// if (data.input)
-		// {
-		// 	add_history(data.input);
-		// 	nbword = word_count(data.input);
-		// 	printf("nbword = %d\n", nbword);
-		// 	data.token = ft_calloc(nbword + 1, sizeof(t_token));
-		// 	if (!data.token)
-		// 		err_return(&data, "minishell : memory allocation failed\n");
-		// 	if (tokenize_input(&data, data.input) == -1)
-		// 	{
-		// 		ft_putstr_fd("minishell : unclosed quotes\n", 2);
-		// 		data.err_code = 2;
-		// 		return (2); // gestion erreur
-		// 	}
-		// 	free(data.input);
-		// 	data.input = NULL;
-		// 	operator_check(&data);
-		// 	data.cmd_count = 1;
-		// 	print_token(&data);
-		// 	define_token(&data, 0);
-		// 	// print_token(&data);
-		// 	create_cmd_lst(&data);
-		// 	free_data(&data);
-		// }
 	}
 	return (0);
 }

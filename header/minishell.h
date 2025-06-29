@@ -6,7 +6,7 @@
 /*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/06/26 12:05:36 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/06/29 14:46:22 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,13 @@ typedef enum e_type
 	REDIR_OUT,
 	APPEND
 }						t_type;
+typedef enum e_err
+{
+	NO,
+	INF_ERR,
+	OUTF_ERR,
+	HRDC_ERR
+}						t_err;
 typedef struct s_data	t_data;
 typedef struct s_token	t_token;
 typedef struct s_cmd	t_cmd;
@@ -76,6 +83,7 @@ struct					s_cmd
 	char				*outfile_name;
 	int					infile;
 	int					outfile;
+	int					err_status;
 	t_cmd				*next;
 };
 
@@ -106,26 +114,29 @@ int						set_env_var(t_data *data);
 int						rep_env_var(t_data *data, int i, int start, int end);
 int						update_null_var(t_data *data, char **str, int start,
 							int end);
-void					remove_quotes(t_data *data);
+int						remove_quotes(t_data *data);
 int						create_cmd_lst(t_data *data);
 t_cmd					*ft_cmdnew(t_data *data);
 void					ft_cmdadd_back(t_cmd **lst, t_cmd *new);
 t_cmd					*ft_cmdlast(t_cmd *lst);
-void					set_infile(t_data *data);
-void					set_outfile(t_data *data);
-void					set_infile(t_data *data);
-void					set_outfile(t_data *data);
-void					set_heredoc(t_data *data);
+int						set_infile(t_data *data);
+int						set_outfile(t_data *data);
+int						set_heredoc(t_data *data);
+void					update_heredoc(t_cmd *cmd);
 bool					is_last_inf_hrdc(t_data *data, int start, int end);
-int						err_return(t_data *data, char *str);
-int						err_return_token(t_data *data, char *str);
+int						err_return(t_data *data, char *str, int err);
+int						err_return_token(t_data *data, char *str, int err);
 int						last_split(t_data *data);
-int						handle_normal_new(char *old, char **new, int *i);
-int						handle_special_c_new(char *old, char **new, int *i);
+int						handle_normal_new(t_data *data, char *old, char **new,
+							int *i);
+int						handle_special_c_new(t_data *data, char *old,
+							char **new, int *i);
 int						handle_redirect_new(char *old, char **new, int *i,
 							int c);
-int						handle_simple_quote_new(char *old, char **new, int *i);
-int						handle_double_quote_new(char *old, char **new, int *i);
+int						handle_simple_quote_new(t_data *data, char *old,
+							char **new, int *i);
+int						handle_double_quote_new(t_data *data, char *old,
+							char **new, int *i);
 int						ft_tablen(char **tab);
 int						put_token_new(char *old, char **new, int start,
 							int end);

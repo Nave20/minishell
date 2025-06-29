@@ -42,7 +42,7 @@ static char	*cpy_no_quotes(char *str)
 	return (cpy);
 }
 
-void	remove_quotes(t_data *data)
+int	remove_quotes(t_data *data)
 {
 	int	i;
 	int	j;
@@ -58,9 +58,10 @@ void	remove_quotes(t_data *data)
 		{
 			data->token[i].tab = cpy_no_quotes(data->token[i].tab);
 			if (!data->token[i].tab)
-				err_return(data, "minishell : memory allocation failed\n");
+				err_return(data, "minishell : memory allocation failed\n", 1);
 		}
 		i++;
 		j = 0;
 	}
+	return (0);
 }

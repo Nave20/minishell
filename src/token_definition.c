@@ -53,7 +53,7 @@ static void	define_str(t_data *data)
 	}
 }
 
-int	define_token(t_data *data, int k)
+static void	handle_redir(t_data *data)
 {
 	int	i;
 	int	j;
@@ -68,22 +68,28 @@ int	define_token(t_data *data, int k)
 			handle_simple_cmd(data, j, i);
 		else
 			handle_redir_cmd(data, j, i);
-		if (data->token[i].tab)
+		if (data->token[i].tab && data->token[i].tab[0] == '|')
 		{
 			i++;
 			j = i;
-			data->cmd_count++;
 		}
 	}
+}
+
+int	define_token(t_data *data, int k)
+{
+	handle_redir(data);
 	define_str(data);
 	define_build_in(data);
 	if (k == 0)
 	{
 		if (set_env_var(data) == -1)
 			return (-1);
-		last_split(data);
+		if (last_split(data) == -1)
+			return (-1);
 		print_token(data);
-		remove_quotes(data);
+		if (remove_quotes(data) == -1)
+			return (-1);
 	}
 	return (0);
 }
