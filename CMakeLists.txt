@@ -18,4 +18,5 @@ add_executable(minishell
         src/builtins/unset.c
         src/terminal.c
         src/builtins/hub.c
-        src/builtins/exit.c)
+        src/builtins/exit.c
+        src/exec/servo.c)

@@ -55,6 +55,7 @@ typedef enum e_type
 typedef struct s_data	t_data;
 typedef struct s_token	t_token;
 typedef struct s_cmd	t_cmd;
+
 struct					s_data
 {
 	char				*input;
@@ -91,6 +92,8 @@ typedef	struct	s_env
 
 typedef struct	s_all
 {
+	t_cmd	*cmd;
+	t_data	*data;
 	t_env	*env;
 }				t_all;
 //--------------------------------MAIN---------------------------------
@@ -159,7 +162,7 @@ void	ft_env(t_env *env);
 void	ft_export(char *str, t_all all);
 t_env	*ft_unset(char *str, t_all all);
 void	ft_exit(t_all all);
-t_all	hub(t_all all, char **args);
+t_all	hub(t_all all);
 
 //---------------------------------DEV---------------------------------
 void	env_printer(t_env *env);
