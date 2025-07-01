@@ -6,7 +6,7 @@
 /*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/06/29 15:56:07 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/07/01 16:17:10 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,14 +78,30 @@ struct					s_cmd
 	char				*cmd;
 	char				*cmd_bi;
 	char				**str;
+	char				**cmd_tab;
 	char				*hrdc_path;
 	char				*infile_name;
 	char				*outfile_name;
 	int					infile;
 	int					outfile;
-	int					err_status;
+	int					err_inf;
+	int					err_outf;
 	t_cmd				*next;
 };
+
+typedef struct s_env
+{
+	char				*name;
+	char				*line;
+	struct s_env		*next;
+}						t_env;
+
+typedef struct s_all
+{
+	t_cmd				*cmd;
+	t_data				*data;
+	t_env				*env;
+}						t_all;
 
 //--------------------------------MAIN---------------------------------
 
@@ -120,6 +136,8 @@ int						set_env_var(t_data *data);
 int						rep_env_var(t_data *data, int i, int start, int end);
 int						update_null_var(t_data *data, char **str, int start,
 							int end);
+int						update_var(char **str, int start, int end,
+							char *env_var);
 int						remove_quotes(t_data *data);
 int						create_cmd_lst(t_data *data);
 t_cmd					*ft_cmdnew(t_data *data);
@@ -148,6 +166,9 @@ int						ft_tablen(char **tab);
 int						put_token_new(char *old, char **new, int start,
 							int end);
 void					skip_quotes(char *data, int *i);
+int						create_cmd_tab(t_data *data);
 void					print_lst(t_data *data);
 void					print_token(t_data *data);
+int						handle_qustn_mark(t_data *data, int i, int start,
+							int end);
 #endif

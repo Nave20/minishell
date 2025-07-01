@@ -38,10 +38,9 @@ void	free_cmd_content(t_cmd *cmd)
 		cmd->outfile_name = NULL;
 	}
 	if (cmd->str)
-	{
 		free_double_tab(cmd->str);
-		cmd->str = NULL;
-	}
+	if (cmd->cmd_tab)
+		free_double_tab(cmd->cmd_tab);
 }
 
 void	free_cmd(t_data *data)

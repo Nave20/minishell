@@ -81,7 +81,6 @@ static int	set_cmd_lst(t_data *data)
 	if (set_str(data) == -1)
 		return (-1);
 	set_cmd_str(data);
-	print_lst(data);
 	return (0);
 }
 
@@ -107,5 +106,8 @@ int	create_cmd_lst(t_data *data)
 	}
 	if (set_cmd_lst(data) == -1)
 		return (-1);
+	if (create_cmd_tab(data) == -1)
+		return (-1);
+	print_lst(data);
 	return (0);
 }

@@ -13,11 +13,12 @@ static int	open_hrdc(t_data *data, t_cmd *cmd, int *i, int hrdc_nb)
 		hrdc = ft_strjoin("/tmp/heredoc", nb);
 		free(nb);
 		fd = open(hrdc, O_RDONLY);
-		cmd->hrdc_path = hrdc;
+		if (cmd->err_inf != HRDC_ERR && cmd->err_inf != INF_ERR)
+			cmd->hrdc_path = hrdc;
 		if (fd == -1)
 		{
-			cmd->err_status = HRDC_ERR;
-			return (2); // inclure ce fichier dans cmd
+			if (cmd->err_inf != HRDC_ERR && cmd->err_inf != INF_ERR)
+				cmd->err_inf = HRDC_ERR;
 		}
 		else
 			close(fd);
@@ -35,11 +36,12 @@ static int	open_redir_in(t_data *data, t_cmd *cmd, int *i)
 	if (data->token[*i + 1].tab)
 	{
 		fd = open(data->token[++(*i)].tab, O_RDONLY);
-		cmd->infile_name = ft_strdup(data->token[*i].tab);
+		if (cmd->err_inf != HRDC_ERR && cmd->err_inf != INF_ERR)
+			cmd->infile_name = ft_strdup(data->token[*i].tab);
 		if (fd == -1)
 		{
-			cmd->err_status = INF_ERR;
-			return (2); // inclure ce fichier dans cmd
+			if (cmd->err_inf != HRDC_ERR && cmd->err_inf != INF_ERR)
+				cmd->err_inf = INF_ERR;
 		}
 		else
 			close(fd);
@@ -62,12 +64,11 @@ int	set_infile(t_data *data)
 	while (data->token[i].tab)
 	{
 		if (data->token[i].type == REDIR_IN)
-			if (handle_return(open_redir_in(data, cmd, &i), data, &i))
+			if (open_redir_in(data, cmd, &i) == -1)
 				return (-1);
 		if (data->token[i].type == HEREDOC)
 		{
-			if (handle_return(open_hrdc(data, cmd, &i, hrdc_nb), data, &i) ==
-				-1)
+			if (open_hrdc(data, cmd, &i, hrdc_nb) == -1)
 				return (-1);
 			hrdc_nb++;
 		}

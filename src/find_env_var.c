@@ -1,5 +1,19 @@
 #include "../header/minishell.h"
 
+static int	handle_qustn_mark(t_data *data, int i, int start, int end)
+{
+	char	*var;
+
+	var = ft_itoa(data->err_code);
+	if (!var)
+		return (err_return_token(data, "minishell : memory allocation failed\n",
+				1));
+	if (update_var(&data->token[i].tab, start - 1, end, var) == -1)
+		return (err_return_token(data, "minishell : memory allocation failed\n",
+				1));
+	return (0);
+}
+
 static int	get_env_var(t_data *data, int i)
 {
 	int	start;
@@ -13,6 +27,9 @@ static int	get_env_var(t_data *data, int i)
 			+ 1] != '\0')
 		{
 			end = start + 1;
+			if (data->token[i].tab[end] == '?')
+				if (handle_qustn_mark(data, i, start, end + 1) == -1)
+					return (-1);
 			while (ft_isalnum(data->token[i].tab[end])
 				|| data->token[i].tab[end] == '_')
 				end++;
@@ -79,7 +96,7 @@ static int	search_env_var(t_data *data, int *i, int *j)
 	}
 	else if (data->token[*i].tab[*j] == '$'
 		&& (ft_isalnum(data->token[*i].tab[*j + 1]) || data->token[*i].tab[*j
-			+ 1] == '_'))
+			+ 1] == '_' || data->token[*i].tab[*j + 1] == '?'))
 	{
 		if (get_env_var(data, *i) == -1)
 			return (-1);

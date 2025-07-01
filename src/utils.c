@@ -26,9 +26,25 @@ void	print_lst(t_data *data)
 				i++;
 			}
 		}
+		i = 0;
+		len = 0;
+		if (cmd->cmd_tab)
+		{
+			while (cmd->cmd_tab[len])
+				len++;
+			while (i < len)
+			{
+				if (cmd->cmd_tab[i][0] == '\0')
+					printf("cmd_tab = \"\"\n");
+				else
+					printf("cmd_tab = %s\n", cmd->cmd_tab[i]);
+				i++;
+			}
+		}
 		printf("hrdc_path = %s\ninfile  = %s\noutfile = %s\n", cmd->hrdc_path,
 			cmd->infile_name, cmd->outfile_name);
 		i = 0;
+		len = 0;
 		if (!cmd->next)
 			return ;
 		cmd = cmd->next;
@@ -52,3 +68,9 @@ bool	ft_isspace(char c)
 	else
 		return (false);
 }
+
+// int	create_env_tab(t_all *all)
+// {
+// 	char	**env_tab;
+// 	t_env	*env;
+// }

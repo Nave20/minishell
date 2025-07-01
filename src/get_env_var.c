@@ -13,7 +13,7 @@ static void	cpy_env_var(int *i, char *env_var, char *update)
 	}
 }
 
-static int	update_var(char **str, int start, int end, char *env_var)
+int	update_var(char **str, int start, int end, char *env_var)
 {
 	char	*update;
 	int		len;

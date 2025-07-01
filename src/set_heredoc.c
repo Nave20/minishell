@@ -1,12 +1,12 @@
 #include "../header/minishell.h"
 
-static int	open_and_fill_hrdc(int fd, char *delim, char *input, char *f_name)
+static void	open_and_fill_hrdc(int fd, char *delim, char *input, char *f_name)
 {
 	fd = open(f_name, O_CREAT | O_WRONLY | O_TRUNC, 0600);
 	if (fd == -1)
 	{
 		free(input);
-		return (-1); // inclure ce fichier dans cmd
+		return ;
 	}
 	while (ft_strncmp(input, delim, ft_strlen(delim)) != 0)
 	{
@@ -16,7 +16,7 @@ static int	open_and_fill_hrdc(int fd, char *delim, char *input, char *f_name)
 	}
 	free(input);
 	close(fd);
-	return (0);
+	return ;
 }
 
 static int	create_heredoc(t_data *data, t_cmd *cmd, char *delim, int i_hrdc)
@@ -37,14 +37,8 @@ static int	create_heredoc(t_data *data, t_cmd *cmd, char *delim, int i_hrdc)
 	hrdc_nbr = NULL;
 	if (!f_name)
 		err_return(data, "minishell : memory allocation failed\n", 1);
-	if (cmd->err_status != HRDC_ERR)
-		cmd->hrdc_path = ft_strdup(f_name);
 	free(f_name);
-	if (open_and_fill_hrdc(0, delim, input, cmd->hrdc_path) == -1)
-	{
-		cmd->err_status = HRDC_ERR;
-		return (0);
-	}
+	open_and_fill_hrdc(0, delim, input, cmd->hrdc_path);
 	return (0);
 }
 
@@ -71,10 +65,7 @@ static int	handle_heredoc(t_data *data, t_cmd *cmd, int i)
 	static int	i_hrdc;
 
 	if (data->token[i + 1].type == DELIM)
-	{
-		if (create_heredoc(data, cmd, data->token[i + 1].tab, i_hrdc) == -1)
-			return (-1);
-	}
+		create_heredoc(data, cmd, data->token[i + 1].tab, i_hrdc);
 	else
 		return (err_return(data,
 				"minishell: syntax error near unexpected token `newline'", 2));
