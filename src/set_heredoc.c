@@ -37,8 +37,8 @@ static int	create_heredoc(t_data *data, t_cmd *cmd, char *delim, int i_hrdc)
 	hrdc_nbr = NULL;
 	if (!f_name)
 		err_return(data, "minishell : memory allocation failed\n", 1);
+	open_and_fill_hrdc(0, delim, input, f_name);
 	free(f_name);
-	open_and_fill_hrdc(0, delim, input, cmd->hrdc_path);
 	return (0);
 }
 
@@ -62,14 +62,12 @@ void	handle_cmd_ending(t_data *data, t_cmd **cmd, int *i, int *j)
 
 static int	handle_heredoc(t_data *data, t_cmd *cmd, int i)
 {
-	static int	i_hrdc;
-
 	if (data->token[i + 1].type == DELIM)
-		create_heredoc(data, cmd, data->token[i + 1].tab, i_hrdc);
+		create_heredoc(data, cmd, data->token[i + 1].tab, data->nbhrdc);
 	else
 		return (err_return(data,
 				"minishell: syntax error near unexpected token `newline'", 2));
-	i_hrdc++;
+	data->nbhrdc++;
 	return (0);
 }
 
@@ -82,6 +80,7 @@ int	set_heredoc(t_data *data)
 	i = 0;
 	j = 0;
 	cmd = data->cmd;
+	data->nbhrdc = 0;
 	while (data->token[i].tab)
 	{
 		if (data->token[i].type == HEREDOC)

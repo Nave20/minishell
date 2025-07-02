@@ -74,17 +74,3 @@ char	*put_token(t_data *data, int start, int end)
 	token[i] = '\0';
 	return (token);
 }
-
-void	print_token(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	printf("\\\\\\\tTOKEN\t\\\\\\\n");
-	while (data->token[i].tab)
-	{
-		printf("token[%d] = %s, type = %d\n", i, data->token[i].tab,
-			data->token[i].type);
-		i++;
-	}
-}

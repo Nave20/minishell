@@ -1,21 +1,31 @@
 #include "../header/minishell.h"
 
-void	free_double_tab(char **str)
+int	heredoc_destroyer(t_data *data)
 {
-	int	i;
+	char	*str;
+	char	*f_name;
+	char	*hrdc_nbr;
+	int		i;
 
 	i = 0;
-	if (str)
+	str = "/tmp/heredoc";
+	while (i < data->nbhrdc)
 	{
-		while (str[i])
-		{
-			free(str[i]);
-			str[i] = NULL;
-			i++;
-		}
-		free(str);
-		str = NULL;
+		hrdc_nbr = ft_itoa(i);
+		if (!hrdc_nbr)
+			err_return(data, "minishell : memory allocation failed\n, 1", 1);
+		f_name = ft_strjoin(str, hrdc_nbr);
+		free(hrdc_nbr);
+		hrdc_nbr = NULL;
+		if (!f_name)
+			err_return(data, "minishell : memory allocation failed\n", 1);
+		if (access(f_name, F_OK) != -1)
+			unlink(f_name);
+		free(f_name);
+		i++;
 	}
+	f_name = NULL;
+	return (0);
 }
 
 void	free_cmd_content(t_cmd *cmd)
@@ -49,6 +59,7 @@ void	free_cmd(t_data *data)
 	t_cmd	*next;
 
 	cmd = data->cmd;
+	heredoc_destroyer(data);
 	while (cmd)
 	{
 		next = cmd->next;

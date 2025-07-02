@@ -6,7 +6,7 @@
 /*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/07/01 16:17:10 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/07/02 11:23:25 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ struct					s_data
 	char				*input;
 	int					cmd_count;
 	int					err_code;
+	int					nbhrdc;
 	t_token				*token;
 	t_cmd				*cmd;
 };
@@ -167,8 +168,8 @@ int						put_token_new(char *old, char **new, int start,
 							int end);
 void					skip_quotes(char *data, int *i);
 int						create_cmd_tab(t_data *data);
-void					print_lst(t_data *data);
-void					print_token(t_data *data);
 int						handle_qustn_mark(t_data *data, int i, int start,
 							int end);
+void					print_lst(t_data *data);
+void					print_token(t_data *data);
 #endif

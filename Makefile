@@ -28,7 +28,8 @@ SRC_FILES       = \
 					remove_quotes.c \
 					get_env_var.c \
 					token_utils.c \
-					create_and_fill_cmd_tab.c
+					create_and_fill_cmd_tab.c \
+					print_utils.c
 
 BUILTINS_FILES  =
 
