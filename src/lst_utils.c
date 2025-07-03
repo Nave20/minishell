@@ -44,3 +44,20 @@ t_cmd	*ft_cmdnew(t_data *data)
 	new->next = NULL;
 	return (new);
 }
+
+int	ft_envsize(t_env *lst)
+{
+	int		i;
+	t_env	*ptr;
+
+	if (!lst)
+		return (0);
+	ptr = lst;
+	i = 0;
+	while (ptr != NULL)
+	{
+		ptr = ptr->next;
+		i++;
+	}
+	return (i);
+}

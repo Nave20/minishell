@@ -18,7 +18,7 @@ SRC_FILES       = \
 					set_redir_infile.c \
 					set_redir_outfile.c \
 					handle_cmd_type.c \
-					lst_cmd_utils.c \
+					lst_utils.c \
 					find_env_var.c \
 					error_check.c \
 					free_utils.c \
@@ -29,6 +29,8 @@ SRC_FILES       = \
 					get_env_var.c \
 					token_utils.c \
 					create_and_fill_cmd_tab.c \
+					pars_env.c \
+					lst_to_tab.c \
 					print_utils.c
 
 BUILTINS_FILES  =

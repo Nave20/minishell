@@ -80,10 +80,14 @@ static int	main_hub(t_data *data)
 	return (0);
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
 
+	(void)argc;
+	(void)argv;
+	data.env = pars_env(envp);
+	printf("env 0 = %s     %s\n", data.env->name, data.env->line);
 	while (1)
 	{
 		if (main_hub(&data) == 1)

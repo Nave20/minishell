@@ -6,7 +6,7 @@
 /*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/07/02 11:23:25 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/07/03 18:24:37 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,11 @@ typedef enum e_err
 typedef struct s_data	t_data;
 typedef struct s_token	t_token;
 typedef struct s_cmd	t_cmd;
+typedef struct s_env	t_env;
 struct					s_data
 {
+	char				**env_tab;
+	t_env				*env;
 	char				*input;
 	int					cmd_count;
 	int					err_code;
@@ -108,6 +111,8 @@ typedef struct s_all
 
 //-------------------------------PARSING-------------------------------
 int						word_count(char *input);
+t_env					*pars_env(char **env);
+int						ft_envsize(t_env *lst);
 int						tokenize_input(t_data *data, char *input);
 int						handle_normal(t_data *data, int *nbword, int *i);
 int						handle_special_c(t_data *data, int *nbword, int *i);
@@ -172,4 +177,5 @@ int						handle_qustn_mark(t_data *data, int i, int start,
 							int end);
 void					print_lst(t_data *data);
 void					print_token(t_data *data);
+int						lst_to_tab(t_data *data, t_env *env);
 #endif
