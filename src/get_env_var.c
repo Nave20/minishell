@@ -102,7 +102,7 @@ int	rep_env_var(t_data *data, int i, int start, int end)
 		var[j] = data->token[i].tab[start + j];
 		j++;
 	}
-	env_var = getenv(var);
+	env_var = srch_env_var(data, var);
 	free(var);
 	if (env_var)
 	{
@@ -110,7 +110,10 @@ int	rep_env_var(t_data *data, int i, int start, int end)
 			return (err_return_token(data,
 					"minishell : memory allocation failed\n", 1));
 	}
-	else if (update_null_var(data, &data->token[i].tab, start - 1, end) == -1)
-		return (-1);
+	else
+	{
+		if (update_null_var(data, &data->token[i].tab, start - 1, end) == -1)
+			return (-1);
+	}
 	return (0);
 }

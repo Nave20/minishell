@@ -101,6 +101,8 @@ void	free_data(t_data *data)
 {
 	if (data)
 	{
+		if (data->env)
+			free_env(data->env);
 		if (data->input)
 			free(data->input);
 		if (data->token)

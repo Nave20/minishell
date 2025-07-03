@@ -50,8 +50,17 @@ bool	ft_isspace(char c)
 		return (false);
 }
 
-// int	create_env_tab(t_all *all)
-// {
-// 	char	**env_tab;
-// 	t_env	*env;
-// }
+char	*srch_env_var(t_data *data, char *var)
+{
+	t_env *ptr;
+
+	ptr = data->env;
+	while (ptr)
+	{
+		if (ft_strncmp(var, ptr->name, ft_strlen(var)) == 0)
+			return (ptr->line);
+		else
+			ptr = ptr->next;
+	}
+	return (NULL);
+}

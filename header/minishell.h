@@ -6,7 +6,7 @@
 /*   By: lpaysant <lpaysant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/07/03 18:24:37 by lpaysant         ###   ########.fr       */
+/*   Updated: 2025/07/03 18:49:36 by lpaysant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ typedef struct s_all
 //-------------------------------PARSING-------------------------------
 int						word_count(char *input);
 t_env					*pars_env(char **env);
+t_env					*free_env(t_env *head);
 int						ft_envsize(t_env *lst);
 int						tokenize_input(t_data *data, char *input);
 int						handle_normal(t_data *data, int *nbword, int *i);
@@ -139,6 +140,7 @@ void					free_cmd(t_data *data);
 void					free_cmd_content(t_cmd *cmd);
 void					free_double_tab(char **str);
 int						set_env_var(t_data *data);
+char					*srch_env_var(t_data *data, char *var);
 int						rep_env_var(t_data *data, int i, int start, int end);
 int						update_null_var(t_data *data, char **str, int start,
 							int end);

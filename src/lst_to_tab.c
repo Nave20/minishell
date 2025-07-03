@@ -20,13 +20,14 @@ int	join_line(t_env *ptr, t_data *data, int i, char **tab)
 	}
 	tab[i] = line;
 	ptr = ptr->next;
+	return (0);
 }
 
 int	lst_to_tab(t_data *data, t_env *env)
 {
-	t_env *ptr;
-	char **tab;
-	int i;
+	t_env	*ptr;
+	char	**tab;
+	int		i;
 
 	ptr = env;
 	i = 0;
