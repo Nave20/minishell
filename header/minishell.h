@@ -98,7 +98,6 @@ typedef struct	s_all
 	t_data	*data;
 	t_env	*env;
 	int		exit_code;
-	char	**base_env;
 }				t_all;
 //--------------------------------MAIN---------------------------------
 

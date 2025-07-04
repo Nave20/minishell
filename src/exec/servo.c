@@ -13,12 +13,18 @@
 #include "../../header/minishell.h"
 #include "../../libft/libft.h"
 
-void	exec_two(t_all all)
+void sigint_handler(int signum)
+{
+	(void)signum;
+	write(STDOUT_FILENO, "\nminishell> ", 12);
+}
+
+void	exec_two(t_all *all)
 {
 
 }
 
-void	exec_one(t_all all)
+void	exec_one(t_all *all)
 {
 	int		pipe_fd[2];
 	int		prev_fd;
@@ -30,7 +36,7 @@ void	exec_one(t_all all)
 	int		status;
 
 	prev_fd = -1;
-	cmd = all.cmd;
+	cmd = all->cmd;
 	i = 0;
 	j = 0;
 	pipe_fd[0] = -1;
@@ -41,7 +47,12 @@ void	exec_one(t_all all)
 		{
 			cmd->infile = open(cmd->hrdc_path, O_RDONLY);
 			if (cmd->infile == -1)
-				perror("open heredoc file");
+			{
+				ft_putstr_fd(RED"Error opening heredoc file :", 2);
+				ft_putendl_fd(all->cmd->hrdc_path, 2);
+				ft_putendl_fd(".\n"RESET, 2);
+				perror(NULL);
+			}
 		}
 		else if (cmd->infile_name)
 		{
@@ -68,10 +79,23 @@ void	exec_one(t_all all)
 		{
 			now_pid = fork();
 			if (now_pid == -1)
+			{
 				perror("fork");
+				if (pipe_fd[0] != -1)
+					close(pipe_fd[0]);
+				if (pipe_fd[1] != -1)
+					close(pipe_fd[1]);
+				if (prev_fd != -1)
+					close(prev_fd);
+				while (i > 0)
+					waitpid(pid[--i], NULL, 0);
+				break;
+			}
 			if (now_pid == 0)
 			{
-				if (cmd->infile != -1 || cmd->hrdc_path)
+				signal(SIGINT, SIG_DFL);
+				signal(SIGQUIT, SIG_DFL);
+				if (cmd->infile != -1)
 					dup2(cmd->infile, STDIN_FILENO);
 				else if (prev_fd != -1)
 					dup2(prev_fd, STDIN_FILENO);
@@ -85,11 +109,17 @@ void	exec_one(t_all all)
 					close(pipe_fd[1]);
 				if (prev_fd != -1 && prev_fd != STDIN_FILENO)
 					close(prev_fd);
-				exec_two(all);
+				exec_two(*all);
 				exit(EXIT_FAILURE);
 			}
 			else
 			{
+				if (cmd->hrdc_path)
+				{
+					unlink(cmd->hrdc_path);
+					free(cmd->hrdc_path);
+					cmd->hrdc_path = NULL;
+				}
 				pid[i++] = now_pid;
 				if (prev_fd != -1)
 					close(prev_fd);
@@ -108,14 +138,25 @@ void	exec_one(t_all all)
 		}
 		else
 		{
-			hub(all);
+			hub(*all);
 			break;
 		}
 	}
 	while (j < i)
 	{
 		waitpid(pid[j], &status, 0);
-		all.exit_code = WEXITSTATUS(status);
+		if (WIFEXITED(status))
+			all->exit_code = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+		{
+			int sig = WTERMSIG(status);
+			if (sig == SIGINT)
+				write(1, "\n", 1);
+			all->exit_code = 128 + sig;
+			printf("Process %d terminated by signal %d\n", pid[j], sig);
+		}
 		j++;
 	}
+	if (prev_fd != -1)
+		close(prev_fd);
 }
