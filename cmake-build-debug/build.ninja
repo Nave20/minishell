@@ -49,12 +49,6 @@ cmake_ninja_workdir = /home/vpirotti/CLionProjects/minishell/cmake-build-debug/
 
 build cmake_object_order_depends_target_minishell: phony || .
 
-build CMakeFiles/minishell.dir/src/minishell.c.o: C_COMPILER__minishell_unscanned_Debug /home/vpirotti/CLionProjects/minishell/src/minishell.c || cmake_object_order_depends_target_minishell
-  DEP_FILE = CMakeFiles/minishell.dir/src/minishell.c.o.d
-  FLAGS = -g -std=gnu11 -fcolor-diagnostics
-  OBJECT_DIR = CMakeFiles/minishell.dir
-  OBJECT_FILE_DIR = CMakeFiles/minishell.dir/src
-
 build CMakeFiles/minishell.dir/src/builtins/echo.c.o: C_COMPILER__minishell_unscanned_Debug /home/vpirotti/CLionProjects/minishell/src/builtins/echo.c || cmake_object_order_depends_target_minishell
   DEP_FILE = CMakeFiles/minishell.dir/src/builtins/echo.c.o.d
   FLAGS = -g -std=gnu11 -fcolor-diagnostics
@@ -97,12 +91,6 @@ build CMakeFiles/minishell.dir/src/pars_env.c.o: C_COMPILER__minishell_unscanned
   OBJECT_DIR = CMakeFiles/minishell.dir
   OBJECT_FILE_DIR = CMakeFiles/minishell.dir/src
 
-build CMakeFiles/minishell.dir/src/dev_func.c.o: C_COMPILER__minishell_unscanned_Debug /home/vpirotti/CLionProjects/minishell/src/dev_func.c || cmake_object_order_depends_target_minishell
-  DEP_FILE = CMakeFiles/minishell.dir/src/dev_func.c.o.d
-  FLAGS = -g -std=gnu11 -fcolor-diagnostics
-  OBJECT_DIR = CMakeFiles/minishell.dir
-  OBJECT_FILE_DIR = CMakeFiles/minishell.dir/src
-
 build CMakeFiles/minishell.dir/src/builtins/export.c.o: C_COMPILER__minishell_unscanned_Debug /home/vpirotti/CLionProjects/minishell/src/builtins/export.c || cmake_object_order_depends_target_minishell
   DEP_FILE = CMakeFiles/minishell.dir/src/builtins/export.c.o.d
   FLAGS = -g -std=gnu11 -fcolor-diagnostics
@@ -114,12 +102,6 @@ build CMakeFiles/minishell.dir/src/builtins/unset.c.o: C_COMPILER__minishell_uns
   FLAGS = -g -std=gnu11 -fcolor-diagnostics
   OBJECT_DIR = CMakeFiles/minishell.dir
   OBJECT_FILE_DIR = CMakeFiles/minishell.dir/src/builtins
-
-build CMakeFiles/minishell.dir/src/terminal.c.o: C_COMPILER__minishell_unscanned_Debug /home/vpirotti/CLionProjects/minishell/src/terminal.c || cmake_object_order_depends_target_minishell
-  DEP_FILE = CMakeFiles/minishell.dir/src/terminal.c.o.d
-  FLAGS = -g -std=gnu11 -fcolor-diagnostics
-  OBJECT_DIR = CMakeFiles/minishell.dir
-  OBJECT_FILE_DIR = CMakeFiles/minishell.dir/src
 
 build CMakeFiles/minishell.dir/src/builtins/hub.c.o: C_COMPILER__minishell_unscanned_Debug /home/vpirotti/CLionProjects/minishell/src/builtins/hub.c || cmake_object_order_depends_target_minishell
   DEP_FILE = CMakeFiles/minishell.dir/src/builtins/hub.c.o.d
@@ -139,6 +121,12 @@ build CMakeFiles/minishell.dir/src/exec/servo.c.o: C_COMPILER__minishell_unscann
   OBJECT_DIR = CMakeFiles/minishell.dir
   OBJECT_FILE_DIR = CMakeFiles/minishell.dir/src/exec
 
+build CMakeFiles/minishell.dir/src/main.c.o: C_COMPILER__minishell_unscanned_Debug /home/vpirotti/CLionProjects/minishell/src/main.c || cmake_object_order_depends_target_minishell
+  DEP_FILE = CMakeFiles/minishell.dir/src/main.c.o.d
+  FLAGS = -g -std=gnu11 -fcolor-diagnostics
+  OBJECT_DIR = CMakeFiles/minishell.dir
+  OBJECT_FILE_DIR = CMakeFiles/minishell.dir/src
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target minishell
@@ -147,7 +135,7 @@ build CMakeFiles/minishell.dir/src/exec/servo.c.o: C_COMPILER__minishell_unscann
 #############################################
 # Link the executable minishell
 
-build minishell: C_EXECUTABLE_LINKER__minishell_Debug CMakeFiles/minishell.dir/src/minishell.c.o CMakeFiles/minishell.dir/src/builtins/echo.c.o CMakeFiles/minishell.dir/libft/ft_putendl_fd.c.o CMakeFiles/minishell.dir/src/builtins/cd.c.o CMakeFiles/minishell.dir/src/builtins/pwd.c.o CMakeFiles/minishell.dir/src/builtins/env.c.o CMakeFiles/minishell.dir/src/env_cmd.c.o CMakeFiles/minishell.dir/src/pars_env.c.o CMakeFiles/minishell.dir/src/dev_func.c.o CMakeFiles/minishell.dir/src/builtins/export.c.o CMakeFiles/minishell.dir/src/builtins/unset.c.o CMakeFiles/minishell.dir/src/terminal.c.o CMakeFiles/minishell.dir/src/builtins/hub.c.o CMakeFiles/minishell.dir/src/builtins/exit.c.o CMakeFiles/minishell.dir/src/exec/servo.c.o
+build minishell: C_EXECUTABLE_LINKER__minishell_Debug CMakeFiles/minishell.dir/src/builtins/echo.c.o CMakeFiles/minishell.dir/libft/ft_putendl_fd.c.o CMakeFiles/minishell.dir/src/builtins/cd.c.o CMakeFiles/minishell.dir/src/builtins/pwd.c.o CMakeFiles/minishell.dir/src/builtins/env.c.o CMakeFiles/minishell.dir/src/env_cmd.c.o CMakeFiles/minishell.dir/src/pars_env.c.o CMakeFiles/minishell.dir/src/builtins/export.c.o CMakeFiles/minishell.dir/src/builtins/unset.c.o CMakeFiles/minishell.dir/src/builtins/hub.c.o CMakeFiles/minishell.dir/src/builtins/exit.c.o CMakeFiles/minishell.dir/src/exec/servo.c.o CMakeFiles/minishell.dir/src/main.c.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/minishell.dir
   POST_BUILD = :

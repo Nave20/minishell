@@ -12,21 +12,30 @@ BUILTINS_OBJDIR = $(OBJ_DIR)builtins/
 
 EXEC_FILES      =	servo.c				\
 
-SRC_FILES       =	main.c word_count.c
-					tokenization.c
-					token_definition.c
-					is_something.c
-					lst_create.c
-					set_heredoc.c
-					set_redir_file.c
-					handle_cmd_type.c
-					lst_cmd_utils.c
-					set_env_var.c
-					error_check.c
-					free_utils.c
-					last_split.c
-					utils.c
-					new_token_utils.c
+SRC_FILES       =	main.c \
+                    					word_count.c \
+                    					tokenization.c \
+                    					token_definition.c \
+                    					is_something.c \
+                    					lst_create.c \
+                    					set_heredoc.c \
+                    					set_redir_infile.c \
+                    					set_redir_outfile.c \
+                    					handle_cmd_type.c \
+                    					lst_utils.c \
+                    					find_env_var.c \
+                    					error_check.c \
+                    					free_utils.c \
+                    					last_split.c \
+                    					utils.c \
+                    					new_token_utils.c \
+                    					remove_quotes.c \
+                    					get_env_var.c \
+                    					token_utils.c \
+                    					create_and_fill_cmd_tab.c \
+                    					pars_env.c \
+                    					lst_to_tab.c \
+                    					print_utils.c
 
 BUILTINS_FILES  = 	echo.c				\
 					cd.c				\
