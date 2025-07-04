@@ -40,11 +40,12 @@ bool	is_locked(char *tab)
 {
 	int	i;
 
-	i = 1;
+	i = 0;
 	while (tab[i])
 	{
 		if (tab[i] == '\'')
 		{
+			i++;
 			while (tab[i] && tab[i] != '\'')
 				i++;
 			if (tab[i] == '\0')
@@ -52,6 +53,7 @@ bool	is_locked(char *tab)
 		}
 		if (tab[i] == '"')
 		{
+			i++;
 			while (tab[i] && tab[i] != '"')
 				i++;
 			if (tab[i] == '\0')
@@ -79,12 +81,4 @@ bool	is_last_inf_hrdc(t_data *data, int start, int end)
 		return (1);
 	else
 		return (0);
-}
-
-bool	ft_isspace(char c)
-{
-	if (c >= 9 && c <= 13)
-		return (true);
-	else
-		return (false);
 }

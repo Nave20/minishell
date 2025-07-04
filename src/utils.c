@@ -1,62 +1,35 @@
 #include "../header/minishell.h"
 
-void	print_lst(t_data *data)
-{
-	t_cmd	*cmd;
-	int		i;
-
-	i = 0;
-	cmd = data->cmd;
-	while (data->cmd != NULL)
-	{
-		printf("\\\\\\\tCMD\t\\\\\\\ncmd = %s\ncmd_bi = %s\nhrdc_path = %s\n",
-			cmd->cmd, cmd->cmd_bi, cmd->hrdc_path);
-		printf("infile fd = %d\noutfile fd = %d\n", cmd->infile, cmd->outfile);
-		if (cmd->str)
-		{
-			while (cmd->str[i])
-			{
-				printf("str = %s\n", cmd->str[i]);
-				i++;
-			}
-		}
-		i = 0;
-		if (!cmd->next)
-			return ;
-		cmd = cmd->next;
-	}
-}
-
-char	*put_token(t_data *data, int start, int end)
-{
-	char	*token;
-	int		i;
-
-	i = 0;
-	token = ft_calloc(end - start + 2, sizeof(char));
-	if (!token)
-		exit_failure(data, "minishell : memory allocation failed\n");
-	while (start <= end)
-	{
-		token[i] = data->input[start];
-		start++;
-		i++;
-	}
-	token[i] = '\0';
-	return (token);
-}
-
-void	print_token(t_data *data)
+void	free_double_tab(char **str)
 {
 	int	i;
 
 	i = 0;
-	while (data->token[i].tab)
+	if (str)
 	{
-		printf("\\\\\\\tTOKEN\t\\\\\\\ntoken[%d] = %s, type = %d, quote = %d\n",
-			i, data->token[i].tab, data->token[i].type, data->token[i].quote);
-		i++;
+		while (str[i])
+		{
+			free(str[i]);
+			str[i] = NULL;
+			i++;
+		}
+		free(str);
+		str = NULL;
 	}
+}
+
+int	handle_qustn_mark(t_data *data, int i, int start, int end)
+{
+	char	*var;
+
+	var = ft_itoa(data->err_code);
+	if (!var)
+		return (err_return_token(data, "minishell : memory allocation failed\n",
+				1));
+	if (update_var(&data->token[i].tab, start - 1, end, var) == -1)
+		return (err_return_token(data, "minishell : memory allocation failed\n",
+				1));
+	return (0);
 }
 
 int	ft_tablen(char **tab)
@@ -67,4 +40,27 @@ int	ft_tablen(char **tab)
 	while (tab[i])
 		i++;
 	return (i);
+}
+
+bool	ft_isspace(char c)
+{
+	if (c >= 9 && c <= 13)
+		return (true);
+	else
+		return (false);
+}
+
+char	*srch_env_var(t_data *data, char *var)
+{
+	t_env *ptr;
+
+	ptr = data->env;
+	while (ptr)
+	{
+		if (ft_strncmp(var, ptr->name, ft_strlen(var)) == 0)
+			return (ptr->line);
+		else
+			ptr = ptr->next;
+	}
+	return (NULL);
 }

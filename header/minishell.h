@@ -23,6 +23,7 @@
 # define UNDER "\033[4m"
 # define BLINK "\033[5m"
 # define REVERSE "\033[7m"
+# define MAX_COM 100
 
 //-------------------------------INCLUDE-------------------------------
 # include <stdio.h>
@@ -32,6 +33,7 @@
 # include <unistd.h>
 # include <errno.h>
 # include <stdbool.h>
+#include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../libft/libft.h"
@@ -95,6 +97,8 @@ typedef struct	s_all
 	t_cmd	*cmd;
 	t_data	*data;
 	t_env	*env;
+	int		exit_code;
+	char	**base_env;
 }				t_all;
 //--------------------------------MAIN---------------------------------
 

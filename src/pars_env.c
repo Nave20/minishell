@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   pars_env.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: vpirotti <vpirotti@student.1337.ma>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/15 16:30:04 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/05/15 16:30:04 by vpirotti         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../header/minishell.h"
 #include "../libft/libft.h"
 
@@ -65,10 +53,10 @@ t_env	*alloc(char *str)
 
 t_env	*pars_env(char **env)
 {
-	int		i;
-	t_env	*node;
-	t_env	*next;
-	t_env	*head;
+	int i;
+	t_env *node;
+	t_env *next;
+	t_env *head;
 
 	i = 0;
 	head = alloc(env[i]);
