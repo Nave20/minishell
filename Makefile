@@ -60,7 +60,16 @@ NAME            = minishell
 CC              = gcc
 FLAGS           = -Wall -Wextra -Werror -I$(INC_DIR)
 
-all: $(NAME)
+all: $(OBJ_DIR) $(EXEC_OBJDIR) $(BUILTINS_OBJDIR) $(NAME)
+
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
+$(EXEC_OBJDIR):
+	mkdir -p $(EXEC_OBJDIR)
+
+$(BUILTINS_OBJDIR):
+	mkdir -p $(BUILTINS_OBJDIR)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(HEADER)
 	mkdir -p $(OBJ_DIR)

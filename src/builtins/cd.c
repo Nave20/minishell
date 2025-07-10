@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vpirotti <vpirotti@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: lucasp <lucasp@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 13:35:26 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/05/15 13:35:26 by vpirotti         ###   ########.fr       */
+/*   Updated: 2025/07/10 13:50:30 by lucasp           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <linux/limits.h>
 #include "../../header/minishell.h"
 #include "../../libft/libft.h"
+#include <limits.h>
 
 char	*env_value(t_env *env, char *param)
 {
@@ -64,7 +64,7 @@ bool	ft_cd(char **args, t_env *env)
 		if (!target)
 		{
 			free(old_pwd);
-			ft_putendl_fd(RED"cd : HOME not set"RESET, 2);
+			ft_putendl_fd(RED "cd : HOME not set" RESET, 2);
 			return (1);
 		}
 	}
@@ -74,13 +74,15 @@ bool	ft_cd(char **args, t_env *env)
 		if (!target)
 		{
 			free(old_pwd);
-			ft_putendl_fd(RED"cd : OLDPWD not set"RESET, 2);
+			ft_putendl_fd(RED "cd : OLDPWD not set" RESET, 2);
 			return (1);
 		}
-		printf(BLUE"%s\n"RESET, target);
+		printf(BLUE "%s\n" RESET, target);
 	}
 	else
 		target = args[1];
+	printf("DEBUG: cd vers '%s'\n", target);
+	fflush(stdout);
 	if (chdir(target) != 0)
 	{
 		free(old_pwd);

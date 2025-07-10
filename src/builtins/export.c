@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vpirotti <vpirotti@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: lucasp <lucasp@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 13:51:21 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/05/19 13:51:21 by vpirotti         ###   ########.fr       */
+/*   Updated: 2025/07/10 13:03:34 by lucasp           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	add_last(char *str, t_all all)
 	new = alloc(str);
 	if (!new)
 	{
-		return ; //EXIT
+		return ; // EXIT
 	}
 	all.env->next = new;
 }
@@ -39,16 +39,18 @@ void	ft_export(char *str, t_all all)
 	}
 	if (str[0] == '=' && str[1] == 0)
 	{
-		printf(RED"export:"RESET" '%s' "YELLOW"is not a valid "
-						   "identifier\n"RESET, str);
+		printf(RED "export:" RESET " '%s' " YELLOW "is not a valid "
+					"identifier\n" RESET,
+				str);
 		return ;
 	}
 	while (str[i] != '=' && str[i])
 	{
 		if ((str[i] < 'A' || str[i] > 'Z') && str[i] != '_')
 		{
-			printf(RED"export:"RESET" '%s' "YELLOW"is not a valid "
-						   "identifier\n"RESET, str);
+			printf(RED "export:" RESET " '%s' " YELLOW "is not a valid "
+						"identifier\n" RESET,
+					str);
 			return ;
 		}
 		i++;

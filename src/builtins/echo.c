@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vpirotti <vpirotti@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: lucasp <lucasp@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:41:00 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/05/13 12:41:00 by vpirotti         ###   ########.fr       */
+/*   Updated: 2025/07/10 13:28:17 by lucasp           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,21 +38,31 @@ bool	ft_echo(char **content)
 		return (ft_putendl_fd("", 1));
 	if (content[0])
 	{
-		if (valid_fag(content[0]) == 0)
+		if (content[1])
 		{
-			if (ft_putstr_fd(content[1], 1) == -1)
-				return (1);
+			if (valid_fag(content[0]) == 0)
+			{
+				if (ft_putstr_fd(content[1], 1) == -1)
+					return (1);
+				else
+					return (0);
+			}
 			else
-				return (0);
+			{
+				if (ft_putstr_fd(content[0], 1) == -1)
+					a = 1;
+				if (write(1, " ", 1) == -1)
+					a = 1;
+				if (ft_putendl_fd(content[1], 1) == 1 || a == 1)
+					return (1);
+			}
 		}
 		else
 		{
-			if (ft_putstr_fd(content[0], 1) == -1)
-				a = 1;
-			if (write(1, " ", 1) == -1)
-				a = 1;
-			if (ft_putendl_fd(content[1], 1) == 1 || a == 1)
+			if (ft_putendl_fd(content[0], 1) == 1)
 				return (1);
+			else
+				return (0);
 		}
 	}
 	return (0);

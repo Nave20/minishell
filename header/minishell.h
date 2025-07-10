@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vpirotti <vpirotti@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: lucasp <lucasp@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 08:31:36 by vpirotti          #+#    #+#             */
-/*   Updated: 2025/05/13 08:32:49 by vpirotti         ###   ########.fr       */
+/*   Updated: 2025/07/10 13:03:12 by lucasp           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,17 @@
 # define MAX_COM 100
 
 //-------------------------------INCLUDE-------------------------------
-# include <stdio.h>
-# include <stdint.h>
-# include <fcntl.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <errno.h>
-# include <stdbool.h>
-#include <sys/wait.h>
-# include <readline/readline.h>
-# include <readline/history.h>
 # include "../libft/libft.h"
+# include <errno.h>
+# include <fcntl.h>
+# include <readline/history.h>
+# include <readline/readline.h>
+# include <stdbool.h>
+# include <stdint.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <sys/wait.h>
+# include <unistd.h>
 
 //-------------------------------STRUCTS-------------------------------
 typedef enum e_type
@@ -100,21 +100,21 @@ struct					s_cmd
 	t_cmd				*next;
 };
 
-typedef	struct	s_env
+typedef struct s_env
 {
-	char			*name;
-	char			*line;
-	struct s_env	*next;
-}				t_env;
+	char				*name;
+	char				*line;
+	struct s_env		*next;
+}						t_env;
 
-typedef struct	s_all
+typedef struct s_all
 {
-	t_cmd	*cmd;
-	t_data	*data;
-	t_env	*env;
-	int		exit_code;
-	char	**env_tab;
-}				t_all;
+	t_cmd				*cmd;
+	t_data				*data;
+	t_env				*env;
+	int					exit_code;
+	char				**env_tab;
+}						t_all;
 //--------------------------------MAIN---------------------------------
 
 //-------------------------------PARSING-------------------------------
@@ -179,33 +179,35 @@ int						handle_simple_quote_new(t_data *data, char *old,
 int						handle_double_quote_new(t_data *data, char *old,
 							char **new, int *i);
 int						ft_tablen(char **tab);
-int						put_token_new(char *old, char **new, int start,int end);
+int						put_token_new(char *old, char **new, int start,
+							int end);
 void					skip_quotes(char *data, int *i);
 int						create_cmd_tab(t_data *data);
-int						handle_qustn_mark(t_data *data, int i, int start,int end);
+int						handle_qustn_mark(t_data *data, int i, int start,
+							int end);
 void					print_lst(t_data *data);
 void					print_token(t_data *data);
 int						lst_to_tab(t_data *data, t_env *env);
 
 //------------------------------TERMINAL-------------------------------
-void	terminal(t_all all);
+void					terminal(t_all all);
 
 //------------------------------PARS_ENV-------------------------------
-t_env	*pars_env(char **env);
-t_env	*alloc(char *str);
-t_env	*free_env(t_env *head);
-t_env	*free_node(t_env *node);
+t_env					*pars_env(char **env);
+t_env					*alloc(char *str);
+t_env					*free_env(t_env *head);
+t_env					*free_node(t_env *node);
 
 //------------------------------BUILTINS-------------------------------
-bool	ft_echo(char **content);
-bool	ft_cd(char **args, t_env *env);
-bool	ft_pwd(void);
-void	ft_env(t_env *env);
-void	ft_export(char *str, t_all all);
-t_env	*ft_unset(char *str, t_all all);
-void	ft_exit(t_all all);
-t_all	hub(t_all all);
+bool					ft_echo(char **content);
+bool					ft_cd(char **args, t_env *env);
+bool					ft_pwd(void);
+void					ft_env(t_env *env);
+void					ft_export(char *str, t_all all);
+t_env					*ft_unset(char *str, t_all all);
+void					ft_exit(t_all *all);
+t_all					hub(t_all all);
 
-void	exec_one(t_data *data);
+void					exec_one(t_data *data);
 
 #endif
